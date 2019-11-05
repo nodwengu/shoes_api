@@ -1,5 +1,3 @@
-
-
 document.addEventListener('DOMContentLoaded', function () {
   function compileTemplate(selector) {
     let template = document.querySelector(selector);
@@ -130,6 +128,9 @@ document.addEventListener('DOMContentLoaded', function () {
   };
 
   async function addToCart() {
+    //reduce stock for the currrently selected item by one
+    //if item already exists in the basket increase the quantity for the item
+    //
     try {
       let selectedColorOption = colorSelectElem.options[colorSelectElem.selectedIndex].value;
       let selectedSizeOption = sizeSelectElem.options[sizeSelectElem.selectedIndex].value;
@@ -148,6 +149,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
       if(errors.length === 0) {
         errorsElem.innerHTML = '';
+
         let response = await shoeService.getByBrandSizeColor(selectedBrandOption, selectedSizeOption, selectedColorOption);
         let result = response.data;
         let selectedShoe = result.data;
@@ -160,18 +162,22 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     catch(error) {
       console.error(error);
-    }
-    
+    } 
   }
 
   async function cancelBasket() {
     await shoeService.clearBasket();
     //Should be able to update the front end
     showBasket();
+
+    //add all the shoes from basket back to shoes table
+    //reset basket counter to equal zero
   }
 
   async function checkoutBasket() {
     alert("about to checkout the items!");
+    //remove all the items from the basket
+    //reset everything to its default value
   }
 
   showDropdowns();

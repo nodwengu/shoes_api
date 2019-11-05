@@ -177,7 +177,7 @@ module.exports = function (shoeService) {
     }
   };
 
-  async function deleteFromBasket() {
+  async function deleteFromBasket(req, res, next) {
     try {
       await shoeService.deleteFromBasket();
       res.json({
