@@ -28,16 +28,16 @@ module.exports = function ShoeService(pool) {
     return results.rows;
   }
 
-  async function create(shoe) {
-    let data = [
-      shoe.color,
-      shoe.brand,
-      shoe.price,
-      shoe.size,
-      shoe.in_stock
-    ];
+  async function allByBrandSizeColor(theBrand, theSize, theColor) {
+    let query = `SELECT * FROM shoes WHERE brand = $1 AND size = $2 AND color = $3`;
+    let results = await pool.query(query, [theBrand, theSize, theColor]);
 
-    
+    return results.rows;
+  }
+
+  async function create(shoe) {
+    let data = [ shoe.color, shoe.brand, shoe.price, shoe.size, shoe.in_stock ];
+
     let query = `INSERT INTO shoes(color,brand,price,size,in_stock) VALUES($1, $2, $3, $4, $5)`;
 
     return pool.query(query, data);
@@ -69,6 +69,39 @@ module.exports = function ShoeService(pool) {
     return pool.query('DELETE FROM shoes WHERE id = $1', [id]);
   }
 
+  async function createCart(shoe) {
+    let data = [
+      shoe.shoe_id,
+      shoe.color,
+      shoe.brand,
+      shoe.price,
+      shoe.size,
+      shoe.in_stock,
+      shoe.imgurl,
+     
+    ];
+    //let query = `INSERT INTO basket(id,color,brand,price,size,in_stock,imgurl) VALUES($1, $2, $3, $4, $5, $6, $7)`;
+    
+    let results = await pool.query(`INSERT INTO basket(shoe_id,color,brand,price,size,in_stock,imgurl) 
+          VALUES($1, $2, $3, $4, $5, $6, $7)
+          returning id`, data);
+    return results.rows[0];
+
+
+    //return await pool.query(query, data);
+  }
+
+  async function allFromBasket() {
+    let query = `SELECT * FROM basket`;
+    let results = await pool.query(query);
+
+    return await results.rows;
+  }
+
+  async function deleteFromBasket() {
+    return pool.query('DELETE FROM basket');
+  }
+
   return {
     all,
     allByBrand,
@@ -78,5 +111,15 @@ module.exports = function ShoeService(pool) {
     // getOneById
     updateStock,
     deleteById,
+
+
+    allByBrandSizeColor,
+
+
+
+
+    createCart,
+    allFromBasket,
+    deleteFromBasket
   };
 };

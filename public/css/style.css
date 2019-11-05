@@ -1,0 +1,112 @@
+/* Custom Stylesheet */
+/**
+ * Use this file to override Materialize files so you can update
+ * the core Materialize files in the future
+ *
+ * Made By MaterializeCSS.com
+ */
+
+.icon-block {
+  padding: 0 15px;
+}
+.icon-block .material-icons {
+	font-size: inherit;
+}
+
+
+i.left {
+  margin-right: 4px;
+}
+
+span {
+  margin: 0 15% 0 0;
+}
+
+select {
+  margin: 25px 0px 9px 0;
+}
+
+.card.horizontal {
+  padding: 3%;
+}
+
+.option-group {
+  display: flex;
+  align-items: baseline;
+  font-weight: bold;
+}
+
+/* nav {
+  position: fixed;
+  z-index: 999;
+} */
+
+img {
+  width: 80%;
+}
+
+
+.errorMsg {
+  margin: 10px 0;
+  padding: 10px;
+  border-radius: 3px 3px 3px 3px;
+  color: #fff;
+  background-color: #EF534F;
+}
+
+.warning {
+  margin: 10px 0;
+  padding: 10px;
+  border-radius: 3px 3px 3px 3px;
+  color: #000;
+  /* background-color: #FEEFB3; */
+}
+
+.successMessage {
+  margin: 10px 0;
+  padding: 10px;
+  border-radius: 3px 3px 3px 3px;
+  color: #fff;
+  background-color: #5CBB6D;
+}
+
+.errorMessage {
+  margin: 10px 0;
+  padding: 10px;
+  border-radius: 3px 3px 3px 3px;
+  color: #fff;
+  background-color: #EF534F;
+}
+
+.fa-stack[data-count]:after{
+  position:absolute;
+  right:0%;
+  top:0%;
+  content: attr(data-count);
+  font-size:40%;
+  padding:.6em;
+  border-radius:999px;
+  line-height:.75em;
+  color: #EF534F;
+  text-align:center;
+  min-width:1.5em;
+  font-weight:bold;
+  background: white;
+  border-style:solid;
+}
+.fa-circle {
+  color: #EF534F;
+}
+
+.fa-stack {
+  position: relative;
+  display: inline-block;
+  width: 1.9em;
+  height: 1.9em;
+  line-height: 2em;
+  vertical-align: top;
+}
+
+
+
+
