@@ -71,9 +71,14 @@ app.get('/api/shoes', shoesAPI.all);
 app.get('/api/shoes/brand/:brandname', shoesAPI.allByBrand);
 app.get('/api/shoes/size/:size', shoesAPI.allBySize);
 app.get('/api/shoes/brand/:brandname/size/:size', shoesAPI.allByBrandSize);
+app.get('/api/shoes/brand/:brandname/size/:size/color/:color', shoesAPI.allByBrandSizeColor);
 app.get('/api/shoes/delete/:id', shoesAPI.deleteShoe);
 app.post('/api/shoes/sold/:id', shoesAPI.updateStock);
 app.post('/api/shoes', shoesAPI.add);
+
+app.get('/api/cart', shoesAPI.allFromBasket);
+app.post('/api/cart', shoesAPI.createCart);
+app.get('/api/cart/delete', shoesAPI.deleteFromBasket);
 
 app.use(errorHandler);
 
