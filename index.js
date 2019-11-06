@@ -74,6 +74,7 @@ app.get('/api/shoes/brand/:brandname/size/:size', shoesAPI.allByBrandSize);
 app.get('/api/shoes/brand/:brandname/size/:size/color/:color', shoesAPI.allByBrandSizeColor);
 app.get('/api/shoes/delete/:id', shoesAPI.deleteShoe);
 app.post('/api/shoes/sold/:id', shoesAPI.updateStock);
+app.post('/api/shoes/cancel/:id', shoesAPI.addStock);
 app.post('/api/shoes', shoesAPI.add);
 
 app.get('/api/cart', shoesAPI.allFromBasket);

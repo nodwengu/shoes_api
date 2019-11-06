@@ -44,25 +44,12 @@ module.exports = function ShoeService(pool) {
   }
 
   //Update the stock levels when a shoe is sold
-  async function updateStock(shoe) {
-    let data = [
-      shoe.color,
-      shoe.brand,
-      shoe.price,
-      shoe.size,
-      shoe.in_stock--,
-      shoe.id
-    ];
+  async function updateStock(id) {
+    return pool.query(`UPDATE shoes SET in_stock = in_stock - 1 WHERE shoe_id = $1`, [id]);
+  }
 
-    let updateQuery = `UPDATE shoes 
-          SET color = $1, 
-              brand = $2, 
-              price = $3,
-              size = $4,
-              in_stock = $5 
-          WHERE id = $6`;
-
-    return pool.query(updateQuery, data);
+  async function increaseStock(id) {
+    return pool.query(`UPDATE shoes SET in_stock = in_stock + 1 WHERE shoe_id = $1`, [id]);
   }
 
   async function deleteById(id) {
@@ -80,15 +67,11 @@ module.exports = function ShoeService(pool) {
       shoe.imgurl,
      
     ];
-    //let query = `INSERT INTO basket(id,color,brand,price,size,in_stock,imgurl) VALUES($1, $2, $3, $4, $5, $6, $7)`;
-    
+  
     let results = await pool.query(`INSERT INTO basket(shoe_id,color,brand,price,size,in_stock,imgurl) 
           VALUES($1, $2, $3, $4, $5, $6, $7)
           returning id`, data);
     return results.rows[0];
-
-
-    //return await pool.query(query, data);
   }
 
   async function allFromBasket() {
@@ -110,6 +93,7 @@ module.exports = function ShoeService(pool) {
     create,
     // getOneById
     updateStock,
+    increaseStock,
     deleteById,
 
 
