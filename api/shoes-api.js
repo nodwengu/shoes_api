@@ -103,14 +103,7 @@ module.exports = function (shoeService) {
 
   async function updateStock(req, res, next) {
     try {
-      await shoeService.updateStock({
-        color: req.body.color,
-        brand: req.body.brand,
-        price: req.body.price,
-        size: Number(req.body.size),
-        in_stock: Number(req.body.in_stock),
-        id: req.params.id
-      });
+      await shoeService.updateStock(req.params.id);
       res.json({
         status: "success"
       });
@@ -122,6 +115,21 @@ module.exports = function (shoeService) {
       });
     }
   };
+
+  async function addStock(req, res, next) {
+    try {
+      await shoeService.increaseStock(req.params.id);
+      res.json({
+        status: "success"
+      });
+      
+    } catch (err) {
+      res.json({
+        status: "error",
+        error: err.stack
+      });
+    }
+  }
 
   async function deleteShoe(req, res, next) {
     try {
@@ -195,6 +203,7 @@ module.exports = function (shoeService) {
     allByBrandSize,
     add,
     updateStock,
+    addStock,
     deleteShoe,
 
 
