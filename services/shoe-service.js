@@ -7,39 +7,32 @@ module.exports = function ShoeService(pool) {
     return await results.rows;
   }
 
-  async function allByBrand(brandName) {
-    let query = `SELECT * FROM shoes WHERE brand = $1`;
-    let results = await pool.query(query, [brandName]);
-
-    return results.rows;
-  }
-
-  async function allBySize(theSize) {
-    let query = `SELECT * FROM shoes WHERE size = $1`;
-    let results = await pool.query(query, [theSize]);
-
-    return results.rows;
-  }
-
-  async function allByBrandSize(theBrand, theSize) {
-    let query = `SELECT * FROM shoes WHERE brand = $1 AND size = $2`;
-    let results = await pool.query(query, [theBrand, theSize]);
-
-    return results.rows;
-  }
-
   async function allByBrandSizeColor(theBrand, theSize, theColor) {
     let query = `SELECT * FROM shoes WHERE brand = $1 AND size = $2 AND color = $3`;
     let results = await pool.query(query, [theBrand, theSize, theColor]);
 
-    return results.rows;
+    return results.rows[0];
   }
 
   async function create(shoe) {
-    let data = [ shoe.color, shoe.brand, shoe.price, shoe.size, shoe.in_stock ];
+    let data = [ shoe.color, shoe.brand, shoe.price, shoe.size, shoe.in_stock, shoe.imgurl ];
 
-    let query = `INSERT INTO shoes(color,brand,price,size,in_stock) VALUES($1, $2, $3, $4, $5)`;
+    let query = `INSERT INTO shoes(color,brand,price,size,in_stock,imgurl) VALUES($1, $2, $3, $4, $5, $6)`;
 
+    let results = pool.query(query, data);
+    return results;
+  }
+
+  //Update shoe if it already exists
+  async function update(shoe){
+    let data = [
+      shoe.shoe_id,
+      shoe.price,
+      shoe.in_stock,
+      shoe.imgurl ];
+  
+    let query = `UPDATE shoes SET shoe_id = $1, price = $2, in_stock = $3, imgurl = $4 
+        WHERE shoe_id = $1`;
     return pool.query(query, data);
   }
 
@@ -87,21 +80,12 @@ module.exports = function ShoeService(pool) {
 
   return {
     all,
-    allByBrand,
-    allBySize,
-    allByBrandSize,
     create,
-    // getOneById
+    update,
     updateStock,
     increaseStock,
     deleteById,
-
-
     allByBrandSizeColor,
-
-
-
-
     createCart,
     allFromBasket,
     deleteFromBasket

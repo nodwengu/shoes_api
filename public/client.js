@@ -9,6 +9,9 @@ document.addEventListener('DOMContentLoaded', function () {
   const addToCartBtn = document.querySelector('#addToCart');
   const cancelBasketBtn = document.querySelector('#cancelCart');
   const checkoutBtn = document.querySelector('#checkoutBtn');
+  const addNewBtn = document.querySelector('.addNewBtn');
+  const cancelAddNewBtn = document.querySelector('#cancelAddNew');
+  const addBtnElem = document.querySelector('#addBtn');
 
   const colorsTemplate = document.querySelector('.colorsTemplate');
   const sizesTemplate = document.querySelector('.sizesTemplate');
@@ -38,20 +41,42 @@ document.addEventListener('DOMContentLoaded', function () {
   // Client side Factory function
   const shoeService = ShoeService();
 
+  function getColors(arr) {
+    let newArr = arr.map((item) => {
+      return item.color;
+    });
+    //MAKING SURE COLOR IS NOT REPEATED ON THE DROPDOWN
+    return Array.from(new Set(newArr));;
+  }
+
+  function getSizes(arr) {
+    let newArr = arr.map((item) => {
+      return item.size;
+    });
+    return Array.from(new Set(newArr));
+  }
+
+  function getBrands(arr) {
+    let newArr = arr.map((item) => {
+      return item.brand;
+    });
+    return Array.from(new Set(newArr));
+  }
+
   async function showDropdowns() {
     try {
       const response = await shoeService.getAllShoes();
       let result = response.data;
       let data = result.data;
-
+     
       let colorsHTML = colorsTemplateInstance({
-        colors: data
+        colors: getColors(data)
       });
       let sizesHTML = sizesTemplateInstance({
-        sizes: data
+        sizes: getSizes(data)
       });
       let brandsHTML = brandsTemplateInstance({
-        brands: data
+        brands: getBrands(data)
       });
 
       brandsOptionsElem.innerHTML = brandsHTML;
@@ -66,7 +91,7 @@ document.addEventListener('DOMContentLoaded', function () {
   async function showBasket() {
     try {
       let total = 0;
-      const response = await shoeService.getAllFromBasket();
+      let response = await shoeService.getAllFromBasket();
       let result = response.data;
       let basketList = result.data;
 
@@ -79,7 +104,7 @@ document.addEventListener('DOMContentLoaded', function () {
       basketList.forEach(item => {
         total += Number(item.price);
       });
-      document.querySelector('.cartTotal').innerHTML = total;
+      document.querySelector('.cartTotal').innerHTML = total.toFixed(2);
 
       document.querySelector('.fa-stack[data-count]').setAttribute("data-count", basketList.length);
 
@@ -112,9 +137,7 @@ document.addEventListener('DOMContentLoaded', function () {
         let result = response.data;
         let selectedShoe = result.data;
 
-        let shoeHTML = shoeTemplateInstance({
-          selectedShoe: selectedShoe
-        });
+        let shoeHTML = shoeTemplateInstance(selectedShoe);
         selectedShoeElem.innerHTML = shoeHTML;
       } else {
         errorsElem.innerHTML = errorsTemplateInstance({ errors });
@@ -127,7 +150,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
   async function addToCart() {
     //reduce stock for the currrently selected item by one
-    //if item already exists in the basket increase the quantity for the item
     try {
       let selectedColorOption = colorSelectElem.options[colorSelectElem.selectedIndex].value;
       let selectedSizeOption = sizeSelectElem.options[sizeSelectElem.selectedIndex].value;
@@ -150,22 +172,21 @@ document.addEventListener('DOMContentLoaded', function () {
         let response = await shoeService.getByBrandSizeColor(selectedBrandOption, selectedSizeOption, selectedColorOption);
         let result = response.data;
         let selectedShoe = result.data;
-
-        if(selectedShoe[0].in_stock > 0) {
-          await shoeService.updateStock(selectedShoe[0].shoe_id);
+     
+        if (selectedShoe.in_stock > 0) {
+          let id = selectedShoe.shoe_id;
+          await shoeService.updateStock(id);
           await shoeService.addToBasket(selectedShoe);
 
-          let shoeHTML = shoeTemplateInstance({
-            selectedShoe: selectedShoe
-          });
+          let shoeHTML = shoeTemplateInstance(selectedShoe);
           selectedShoeElem.innerHTML = shoeHTML;
 
           showBasket();
-        }
+        } 
       } else {
         errorsElem.innerHTML = errorsTemplateInstance({ errors });
       }
-      
+
     } catch (error) {
       console.error(error);
     }
@@ -177,20 +198,19 @@ document.addEventListener('DOMContentLoaded', function () {
       let basketResult = basketResponse.data;
       let basketData = basketResult.data;
 
-      if(basketData.length > 0) {
-        for(let item of basketData) {
-          // update stock in shoes table
+      if (basketData.length > 0) {
+        for (let item of basketData) {
           // Adding shoes back to shoes table
           await shoeService.addStock(item.shoe_id);
         }
-        
+
         await shoeService.clearBasket();
 
         showBasket();
 
         // Reload the current page without the browser cache
         location.reload(true);
-      } 
+      }
     } catch (error) {
       console.error(error);
     }
@@ -206,6 +226,90 @@ document.addEventListener('DOMContentLoaded', function () {
     } catch (error) {
       console.error(error);
     }
+  }
+
+  async function addShoe() {
+    try {
+      //Get user input values
+      let colorVal = (document.querySelector('#color').value).toLowerCase();
+      let sizeVal = document.querySelector('#size').value;
+      let brandVal = (document.querySelector('#brand').value).toLowerCase();
+      let priceVal = Number(document.querySelector('#price').value);
+      let inStockVal = Number(document.querySelector('#quantity').value);
+      let imageVal = document.querySelector('#imageUrl').value;
+
+      let validColor = typeof colorVal === 'string' && colorVal.trim() != '';
+      let validSize = typeof sizeVal === 'string' && sizeVal.trim() != '';
+      let validBrand = typeof brandVal === 'string' && brandVal.trim() != '';
+      let validPrice = typeof priceVal === 'number' && priceVal != '';
+      let validInstock = typeof inStockVal === 'number' && inStockVal != '';
+      let validImageVal = typeof imageVal === 'string' && imageVal.trim() != '';
+
+      let errors = [];
+
+      if (!validColor) {
+        errors.push('Invalid Color');
+      }
+      if (!validSize) {
+        errors.push('Invalid Size');
+      }
+      if (!validBrand) {
+        errors.push('Invalid Brand');
+      }
+      if (!validPrice) {
+        errors.push('Invalid Price');
+      }
+      if (!validInstock) {
+        errors.push('Invalid InStock');
+      }
+      if (!validImageVal) {
+        errors.push('Invalid Image url');
+      }
+
+      if (errors.length === 0) {
+        let response = await shoeService.getByBrandSizeColor(brandVal, sizeVal, colorVal);
+        let result = response.data;
+        let selectedShoe = result.data;
+      
+        if(selectedShoe) {
+          // Need to update the selected shoe
+          await shoeService.update({
+            shoe_id: selectedShoe.shoe_id,
+            price: priceVal,
+            in_stock: inStockVal,
+            imgurl: imageVal
+          });
+
+        } else {
+          //add it to the shoes
+          await shoeService.addShoe({
+            color: colorVal,
+            size: sizeVal,
+            brand: brandVal,
+            price: priceVal,
+            in_stock: inStockVal,
+            imgurl: imageVal,
+          });
+          let input_fields = document.querySelectorAll('#form-input input');
+          input_fields.forEach(input => {
+            input.value = "";
+          });
+          document.querySelector('.successMessage').innerHTML = "Shoe was added successfully.";
+          document.querySelector('.successMessage').style.display = "block";
+          setTimeout(function () {
+            document.querySelector('.successMessage').style.display = "none";
+          }, 3000);
+
+          showDropdowns()
+
+        }
+      } else {
+        errorsElem.innerHTML = errorsTemplateInstance({ errors });
+      }
+
+    } catch (error) {
+      console.error(error);
+    }
 
   }
 
@@ -216,24 +320,21 @@ document.addEventListener('DOMContentLoaded', function () {
   addToCartBtn.addEventListener('click', addToCart);
   cancelBasketBtn.addEventListener('click', cancelBasket);
   checkoutBtn.addEventListener('click', checkoutBasket);
+  addBtnElem.addEventListener('click', addShoe);
+
+  addNewBtn.addEventListener('click', () => {
+    document.querySelector('.addNew-wrapper').style.display = "block";
+  });
+
+  cancelAddNewBtn.addEventListener('click', () => {
+    document.querySelector('.addNew-wrapper').style.display = "none";
+  });
 
 
 });
 
 
-
-
 function ShoeService() {
-  // let basketList = [];
-
-  // function createBasket(data) {
-  //   basketList.push(data);
-  // }
-
-  function getCart() {
-    return basketList;
-  }
-
   function getAllShoes() {
     return axios.get('/api/shoes');
   }
@@ -266,10 +367,9 @@ function ShoeService() {
     return axios.post('/api/shoes', data);
   }
 
-
-
-
-
+  function update(data) {
+    return axios.post(`/api/shoes/update`, data);
+  }
 
   function getAllFromBasket() {
     return axios.get('/api/cart');
@@ -287,7 +387,6 @@ function ShoeService() {
 
 
   return {
-    // addShoe,
     getAllShoes,
     getByBrand,
     getBySize,
@@ -295,15 +394,12 @@ function ShoeService() {
     updateStock,
     addStock,
     addShoe,
+    update,
 
     getByBrandSizeColor,
 
     getAllFromBasket,
     addToBasket,
-
-
-    getCart,
-    // createBasket,
     clearBasket
   };
 }

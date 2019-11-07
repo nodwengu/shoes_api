@@ -62,32 +62,30 @@
 
       <script type="text/x-handlebars-template" class="myTemplate">
          <div class="animated fadeIn">
-            {{#each selectedShoe}}
-               <img src="{{imgurl}}"> 
-               <p>We have <span style="font-weight: 800; margin: 0 0px 0 0;">{{in_stock}} {{color}} {{brand}} </span>  
-               shoes in stock at a price of <span style="font-weight: 800;">R{{price}}</span> each</p>
-            {{/each}}
+            <img src="{{imgurl}}"> 
+            <p>We have <span style="font-weight: 800; margin: 0 0px 0 0;">{{in_stock}} {{color}} {{brand}} </span>  
+            shoes in stock at a price of <span style="font-weight: 800;">R{{price}}</span> each</p>
          </div>
       </script>
 
       <script type="text/x-handlebars-template" class="colorsTemplate">
          <option value="" selected>Choose your color</option>
          {{#each colors}}
-            <option class='colorOption' name='{{color}}' value='{{color}}'> {{color}} </option>
+            <option class='colorOption' name='{{this}}' value='{{this}}'> {{this}} </option>
          {{/each}}
       </script>
 
       <script type="text/x-handlebars-template" class="sizesTemplate">
          <option value="" selected>Choose your size</option>
          {{#each sizes}}
-            <option class='sizeOption' value='{{size}}'> {{size}} </option>
+            <option class='sizeOption' value='{{this}}'> {{this}} </option>
          {{/each}}
       </script>
 
       <script type="text/x-handlebars-template" class="brandsTemplate">
          <option value="" selected>Choose your brand</option>
          {{#each brands}}
-            <option class='brandOption' value='{{brand}}'> {{brand}} </option>
+            <option class='brandOption' value='{{this}}'> {{this}} </option>
          {{/each}}
       </script>
 
@@ -247,8 +245,6 @@
 
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
-  <script src="js/shoeCatalogue.js"></script>
-  <script type="text/javascript" src="shoes.js"></script>
   <script src="./client.js"></script>
 
   </body>

@@ -4,10 +4,6 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const flash = require('express-flash');
 const session = require('express-session');
-// const router = require('./routes');
-// const auth = require('./auth/index');
-//const cors = require('cors');
-// const authMiddleware = require('./auth/middleware');
 
 const app = express();
 
@@ -46,8 +42,6 @@ app.engine('handlebars', exphbs({ defaultLayout: 'main' }));
 app.set('view engine', 'handlebars');
 
 app.use(express.static(__dirname + '/public'));
-//app.use(express.static('public'));
-//setup middleware
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -68,14 +62,13 @@ app.get('/', (req, res, next) => {
 });
 
 app.get('/api/shoes', shoesAPI.all);
-app.get('/api/shoes/brand/:brandname', shoesAPI.allByBrand);
-app.get('/api/shoes/size/:size', shoesAPI.allBySize);
-app.get('/api/shoes/brand/:brandname/size/:size', shoesAPI.allByBrandSize);
+// app.get('/api/shoes/brand/:brandname/size/:size', shoesAPI.allByBrandSize);
 app.get('/api/shoes/brand/:brandname/size/:size/color/:color', shoesAPI.allByBrandSizeColor);
 app.get('/api/shoes/delete/:id', shoesAPI.deleteShoe);
 app.post('/api/shoes/sold/:id', shoesAPI.updateStock);
 app.post('/api/shoes/cancel/:id', shoesAPI.addStock);
 app.post('/api/shoes', shoesAPI.add);
+app.post('/api/shoes/update', shoesAPI.update);
 
 app.get('/api/cart', shoesAPI.allFromBasket);
 app.post('/api/cart', shoesAPI.createCart);
