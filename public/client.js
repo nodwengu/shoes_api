@@ -136,9 +136,17 @@ document.addEventListener('DOMContentLoaded', function () {
         let response = await shoeService.getByBrandSizeColor(selectedBrandOption, selectedSizeOption, selectedColorOption);
         let result = response.data;
         let selectedShoe = result.data;
-
-        let shoeHTML = shoeTemplateInstance(selectedShoe);
-        selectedShoeElem.innerHTML = shoeHTML;
+        if(selectedShoe) {
+          document.querySelector('.errorMsg').style.display = "none";
+          let shoeHTML = shoeTemplateInstance(selectedShoe);
+          selectedShoeElem.innerHTML = shoeHTML;
+        } else {
+          document.querySelector('.errorMsg').style.display = "block";
+          document.querySelector('.errorMsg').innerHTML = "Item: OUT OF STOCK";
+          document.querySelector('.shoeInfo').innerHTML = "No Data Found...";
+          document.querySelector('.shoeInfo').classList.add('animated', 'fadeIn', 'warning');
+        }
+       
       } else {
         errorsElem.innerHTML = errorsTemplateInstance({ errors });
       }
