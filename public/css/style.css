@@ -107,6 +107,10 @@ img {
   vertical-align: top;
 }
 
+.hidden {
+  display: none;
+}
+
 
 
 
