@@ -15,7 +15,14 @@ module.exports = function ShoeService(pool) {
   }
 
   async function create(shoe) {
-    let data = [ shoe.color, shoe.brand, shoe.price, shoe.size, shoe.in_stock, shoe.imgurl ];
+    let data = [ 
+      shoe.color.charAt(0).toUpperCase() + (shoe.color).slice(1), 
+      shoe.brand.charAt(0).toUpperCase() + (shoe.brand).slice(1), 
+      shoe.price, 
+      shoe.size, 
+      shoe.in_stock, 
+      shoe.imgurl 
+    ];
 
     let query = `INSERT INTO shoes(color,brand,price,size,in_stock,imgurl) VALUES($1, $2, $3, $4, $5, $6)`;
 
@@ -50,10 +57,11 @@ module.exports = function ShoeService(pool) {
   }
 
   async function createCart(shoe) {
+
     let data = [
       shoe.shoe_id,
-      shoe.color,
-      shoe.brand,
+      shoe.color.charAt(0).toUpperCase() + (shoe.color).slice(1),
+      shoe.brand.charAt(0).toUpperCase() + (shoe.brand).slice(1),
       shoe.price,
       shoe.size,
       shoe.in_stock,
