@@ -41,26 +41,38 @@ document.addEventListener('DOMContentLoaded', function () {
   // Client side Factory function
   const shoeService = ShoeService();
 
+  function getSorted(arr){
+    return arr.sort(function(a, b){ return a - b; });
+  }
+  
   function getColors(arr) {
     let newArr = arr.map((item) => {
       return item.color;
     });
     //MAKING SURE COLOR IS NOT REPEATED ON THE DROPDOWN
-    return Array.from(new Set(newArr));;
+    //return Array.from(new Set(newArr)).sort();
+
+    let colors = Array.from(new Set(newArr)).sort();
+    return getSorted(colors);
   }
 
   function getSizes(arr) {
     let newArr = arr.map((item) => {
       return item.size;
     });
-    return Array.from(new Set(newArr));
+    //return Array.from(new Set(newArr)).sort();
+    let sizes = Array.from(new Set(newArr)).sort();
+    return getSorted(sizes);
   }
 
   function getBrands(arr) {
     let newArr = arr.map((item) => {
       return item.brand;
     });
-    return Array.from(new Set(newArr));
+    //return Array.from(new Set(newArr)).sort();
+
+    let brands = Array.from(new Set(newArr)).sort();
+    return getSorted(brands);
   }
 
   async function showDropdowns() {
@@ -137,14 +149,23 @@ document.addEventListener('DOMContentLoaded', function () {
         let result = response.data;
         let selectedShoe = result.data;
         if(selectedShoe) {
-          document.querySelector('.errorMsg').style.display = "none";
-          let shoeHTML = shoeTemplateInstance(selectedShoe);
-          selectedShoeElem.innerHTML = shoeHTML;
+          if(selectedShoe.in_stock == 0) {
+            let shoeHTML = shoeTemplateInstance(selectedShoe);
+            selectedShoeElem.innerHTML = shoeHTML;
+            addToCartBtn.style.display = "none";
+          } else {
+            document.querySelector('.errorMsg').style.display = "none";
+            let shoeHTML = shoeTemplateInstance(selectedShoe);
+            selectedShoeElem.innerHTML = shoeHTML;
+            addToCartBtn.style.display = "block";
+          }
+          
         } else {
           document.querySelector('.errorMsg').style.display = "block";
           document.querySelector('.errorMsg').innerHTML = "Item: OUT OF STOCK";
           document.querySelector('.shoeInfo').innerHTML = "No Data Found...";
-          document.querySelector('.shoeInfo').classList.add('animated', 'fadeIn', 'warning');
+          document.querySelector('.shoeInfo').classList.add('animated', 'fadeIn', 'warning'); 
+          addToCartBtn.style.display = "none";
         }
        
       } else {
@@ -200,7 +221,9 @@ document.addEventListener('DOMContentLoaded', function () {
           selectedShoeElem.innerHTML = shoeHTML;
 
           showBasket();
-        } 
+        } else {
+          addToCartBtn.style.display = "none";
+        }
       } else {
         errorsElem.innerHTML = errorsTemplateInstance({ errors });
       }
@@ -216,10 +239,12 @@ document.addEventListener('DOMContentLoaded', function () {
       let basketResult = basketResponse.data;
       let basketData = basketResult.data;
 
-      if (basketData.length > 0) {
-        for (let item of basketData) {
-          // Adding shoes back to shoes table
-          await shoeService.addStock(item.shoe_id);
+      if(basketData.length > 0) {
+        for(let i = 0; i < basketData.length; i++) {
+          let elem = basketData[0];
+          for(let j = 0; j < elem.quantity; j++) {
+            await shoeService.addStock(elem.shoe_id);
+          }
         }
 
         await shoeService.clearBasket();
@@ -319,6 +344,8 @@ document.addEventListener('DOMContentLoaded', function () {
           }, 3000);
 
           showDropdowns();
+
+          document.querySelector('.addNew-wrapper').style.display = "none";
 
         }
       } else {
