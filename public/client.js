@@ -102,7 +102,7 @@ document.addEventListener('DOMContentLoaded', function () {
       cartItemsElem.innerHTML = basketHTML;
 
       basketList.forEach(item => {
-        total += Number(item.price);
+        total += Number(item.price * item.quantity);
       });
       document.querySelector('.cartTotal').innerHTML = total.toFixed(2);
 
@@ -136,9 +136,17 @@ document.addEventListener('DOMContentLoaded', function () {
         let response = await shoeService.getByBrandSizeColor(selectedBrandOption, selectedSizeOption, selectedColorOption);
         let result = response.data;
         let selectedShoe = result.data;
-
-        let shoeHTML = shoeTemplateInstance(selectedShoe);
-        selectedShoeElem.innerHTML = shoeHTML;
+        if(selectedShoe) {
+          document.querySelector('.errorMsg').style.display = "none";
+          let shoeHTML = shoeTemplateInstance(selectedShoe);
+          selectedShoeElem.innerHTML = shoeHTML;
+        } else {
+          document.querySelector('.errorMsg').style.display = "block";
+          document.querySelector('.errorMsg').innerHTML = "Item: OUT OF STOCK";
+          document.querySelector('.shoeInfo').innerHTML = "No Data Found...";
+          document.querySelector('.shoeInfo').classList.add('animated', 'fadeIn', 'warning');
+        }
+       
       } else {
         errorsElem.innerHTML = errorsTemplateInstance({ errors });
       }
@@ -176,7 +184,17 @@ document.addEventListener('DOMContentLoaded', function () {
         if (selectedShoe.in_stock > 0) {
           let id = selectedShoe.shoe_id;
           await shoeService.updateStock(id);
-          await shoeService.addToBasket(selectedShoe);
+
+          let cartResult = await shoeService.getOneFromCart(selectedBrandOption, selectedSizeOption, selectedColorOption);
+          let cartResponse = cartResult.data;
+          let shoe = cartResponse.data;
+
+          if(shoe) {
+            // edit the quantity for the shoe in the basket
+            await shoeService.updateQuantity(shoe.shoe_id);
+          } else {
+            await shoeService.addToBasket(selectedShoe);
+          }
 
           let shoeHTML = shoeTemplateInstance(selectedShoe);
           selectedShoeElem.innerHTML = shoeHTML;
@@ -300,7 +318,7 @@ document.addEventListener('DOMContentLoaded', function () {
             document.querySelector('.successMessage').style.display = "none";
           }, 3000);
 
-          showDropdowns()
+          showDropdowns();
 
         }
       } else {
@@ -383,6 +401,18 @@ function ShoeService() {
     return axios.get('/api/cart/delete');
   }
 
+  function getOneFromCart(brand, size, color) {
+    return axios.get(`/api/basket/brand/${brand}/size/${size}/color/${color}`);
+  }
+
+  // function addStock(id) {
+  //   return axios.post(`/api/shoes/cancel/${id}`);
+  // }
+
+  function updateQuantity(id) {
+    return axios.post(`/api/basket/updateQuantity/${id}`);
+  }
+
 
 
 
@@ -400,6 +430,8 @@ function ShoeService() {
 
     getAllFromBasket,
     addToBasket,
-    clearBasket
+    clearBasket,
+    getOneFromCart,
+    updateQuantity
   };
 }

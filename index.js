@@ -73,6 +73,8 @@ app.post('/api/shoes/update', shoesAPI.update);
 app.get('/api/cart', shoesAPI.allFromBasket);
 app.post('/api/cart', shoesAPI.createCart);
 app.get('/api/cart/delete', shoesAPI.deleteFromBasket);
+app.get('/api/basket/brand/:brandname/size/:size/color/:color', shoesAPI.getOneFromCart);
+app.post('/api/basket/updateQuantity/:id', shoesAPI.increaseQuantity);
 
 app.use(errorHandler);
 
