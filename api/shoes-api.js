@@ -147,6 +147,40 @@ module.exports = function (shoeService) {
     }
   }
 
+  async function getOneFromCart(req, res, next) {
+    try {
+      let brand = req.params.brandname;
+      let size = req.params.size;
+      let color = req.params.color;
+
+      let results = await shoeService.getOneBasket(brand, size, color);
+
+      res.json({
+        status: 'success',
+        data: results
+      });
+    }
+    catch (error) {
+      next(error);
+    }
+
+  }
+
+  async function increaseQuantity(req, res, next) {
+    try {
+      await shoeService.updateBasketQuantity(req.params.id);
+      res.json({
+        status: "success"
+      });
+      
+    } catch (err) {
+      res.json({
+        status: "error",
+        error: err.stack
+      });
+    }
+  }
+
   return {
     all,
     add,
@@ -157,6 +191,8 @@ module.exports = function (shoeService) {
     allByBrandSizeColor,
     createCart,
     allFromBasket,
-    deleteFromBasket
+    deleteFromBasket,
+    getOneFromCart,
+    increaseQuantity
   };
 };

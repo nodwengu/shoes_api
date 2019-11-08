@@ -78,6 +78,18 @@ module.exports = function ShoeService(pool) {
     return pool.query('DELETE FROM basket');
   }
 
+  async function getOneBasket(brand, size, color) {
+    let query = `SELECT * FROM basket WHERE brand = $1 AND size = $2 AND color = $3`;
+    let results = await pool.query(query, [brand, size, color]);
+
+    return results.rows[0];
+  }
+
+  async function updateBasketQuantity(id) {
+    return pool.query(`UPDATE basket SET quantity = quantity + 1 WHERE shoe_id = $1`, [id]);
+  }
+
+
   return {
     all,
     create,
@@ -88,6 +100,8 @@ module.exports = function ShoeService(pool) {
     allByBrandSizeColor,
     createCart,
     allFromBasket,
-    deleteFromBasket
+    deleteFromBasket,
+    getOneBasket,
+    updateBasketQuantity
   };
 };
