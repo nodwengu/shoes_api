@@ -1,4 +1,5 @@
 const assert = require('assert');
+const chai = require('chai');
 
 const CreateShoe = require('../services/shoe-service');
 
@@ -42,16 +43,45 @@ describe('The Shoes Catalogue', function () {
     assert.equal(2, results.length);
   });
 
-  
-
-  // it('should be able to return a shoes for a given brand and size and color', async () => {
-  //   const createShoe = CreateShoe(pool);
-  //   let data2 = { color: 'blue', brand: 'nike', price: 100, size: 8, in_stock: 10, imgurl: './images/redNike.jpeg' };
+  it('should be able to return a shoes for a given brand and size', async () => {
+    const createShoe = CreateShoe(pool);
+    let data2 = { color: 'blue', brand: 'nike', price: 100, size: 8, in_stock: 10, imgurl: './images/redNike.jpeg' };
  
-  //   await createShoe.create(data2);
-   
-  //   assert.equal(true, await createShoe.allByBrandSizeColor('nike', 8, 'blue'));
-  // });
+    await createShoe.create(data2);
+
+    let results = await createShoe.allByBrandSize('Nike', 8);
+    chai.assert.typeOf(results, 'object');
+  });
+
+  it('should be able to return a shoes for a given brand and size and color', async () => {
+    const createShoe = CreateShoe(pool);
+    let data2 = { color: 'blue', brand: 'nike', price: 100, size: 8, in_stock: 10, imgurl: './images/redNike.jpeg' };
+ 
+    await createShoe.create(data2);
+
+    let results = await createShoe.allByBrandSizeColor('Nike', 8, 'Blue');
+    chai.assert.typeOf(results, 'object');
+  });
+
+  it('should be able to return a shoes for a given brand', async () => {
+    const createShoe = CreateShoe(pool);
+    let data2 = { color: 'blue', brand: 'nike', price: 100, size: 8, in_stock: 10, imgurl: './images/redNike.jpeg' };
+ 
+    await createShoe.create(data2);
+
+    let results = await createShoe.allByBrand('Nike', 8, 'Blue');
+    chai.assert.typeOf(results, 'object');
+  });
+
+  it('should be able to return a shoes for a given size', async () => {
+    const createShoe = CreateShoe(pool);
+    let data2 = { color: 'blue', brand: 'nike', price: 100, size: 8, in_stock: 10, imgurl: './images/redNike.jpeg' };
+ 
+    await createShoe.create(data2);
+
+    let results = await createShoe.allBySize(8);
+    chai.assert.typeOf(results, 'object');
+  });
 
 
   after(function () {
