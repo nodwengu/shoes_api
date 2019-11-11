@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', function () {
   
   function getColors(arr) {
     let newArr = arr.map((item) => {
-      return item.color;
+      return item.color.charAt(0).toUpperCase() + (item.color).slice(1);
     });
     //MAKING SURE COLOR IS NOT REPEATED ON THE DROPDOWN
     //return Array.from(new Set(newArr)).sort();
@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   function getSizes(arr) {
     let newArr = arr.map((item) => {
-      return item.size;
+      return item.size; 
     });
     //return Array.from(new Set(newArr)).sort();
     let sizes = Array.from(new Set(newArr)).sort();
@@ -67,7 +67,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   function getBrands(arr) {
     let newArr = arr.map((item) => {
-      return item.brand;
+      return item.brand.charAt(0).toUpperCase() + (item.brand).slice(1);
     });
     //return Array.from(new Set(newArr)).sort();
 
@@ -309,6 +309,8 @@ document.addEventListener('DOMContentLoaded', function () {
         errors.push('Invalid Image url');
       }
 
+      brandVal = brandVal.charAt(0).toUpperCase() + brandVal.slice(1);
+      colorVal = colorVal.charAt(0).toUpperCase() + colorVal.slice(1); 
       if (errors.length === 0) {
         let response = await shoeService.getByBrandSizeColor(brandVal, sizeVal, colorVal);
         let result = response.data;
@@ -323,6 +325,13 @@ document.addEventListener('DOMContentLoaded', function () {
             imgurl: imageVal
           });
 
+          document.querySelector('.successMessage').innerHTML = "Shoe was updated successfully.";
+          document.querySelector('.successMessage').style.display = "block";
+          setTimeout(function () {
+            document.querySelector('.addNew-wrapper').style.display = "none";
+            document.querySelector('.successMessage').style.display = "none";
+          }, 3000);
+
         } else {
           //add it to the shoes
           await shoeService.addShoe({
@@ -333,21 +342,20 @@ document.addEventListener('DOMContentLoaded', function () {
             in_stock: inStockVal,
             imgurl: imageVal,
           });
-          let input_fields = document.querySelectorAll('#form-input input');
-          input_fields.forEach(input => {
-            input.value = "";
-          });
+          // let input_fields = document.querySelectorAll('#form-input input');
+          // input_fields.forEach(input => {
+          //   input.value = "";
+          // });
           document.querySelector('.successMessage').innerHTML = "Shoe was added successfully.";
           document.querySelector('.successMessage').style.display = "block";
           setTimeout(function () {
+            document.querySelector('.addNew-wrapper').style.display = "none";
             document.querySelector('.successMessage').style.display = "none";
           }, 3000);
 
-          showDropdowns();
-
-          document.querySelector('.addNew-wrapper').style.display = "none";
-
+          // showDropdowns();
         }
+        showDropdowns();
       } else {
         errorsElem.innerHTML = errorsTemplateInstance({ errors });
       }
