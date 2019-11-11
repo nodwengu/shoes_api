@@ -137,6 +137,22 @@ CREATE TABLE basket(
 ```
 To install all dependencies required for the app to run, on the terminal navigate to the shoes_api folder, and type npm install .
 
+## Mocha Setup
+### Install Mocha
+You need to install Mocha using this command:
+
+$ sudo npm install -g mocha
+
+modules should be able to
+-    ✓ should be able to add new shoes to the storage
+-   ✓ should be able to list all shoes in stock
+ -   ✓ should be able to return a shoes for a given brand and size
+ -   ✓ should be able to return a shoes for a given brand and size and color
+ -  ✓ should be able to return a shoes for a given brand
+ -  ✓ should be able to return a shoes for a given size
+## Running the tests
+In the CLI navigate to the shoes_api and run/type $ mocha and this will be your results;
+
 ## Running the app locally
 The app is deployed at Heroku and gitHub.
 
