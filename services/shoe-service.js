@@ -14,6 +14,27 @@ module.exports = function ShoeService(pool) {
     return results.rows[0];
   }
 
+  async function allByBrandSize(theBrand, theSize) {
+    let query = `SELECT * FROM shoes WHERE brand = $1 AND size = $2`;
+    let results = await pool.query(query, [theBrand, theSize]);
+
+    return results.rows[0];
+  }
+
+  async function allByBrand(theBrand) {
+    let query = `SELECT * FROM shoes WHERE brand = $1`;
+    let results = await pool.query(query, [theBrand]);
+
+    return results.rows[0];
+  }
+
+  async function allBySize(theSize) {
+    let query = `SELECT * FROM shoes WHERE size = $1`;
+    let results = await pool.query(query, [theSize]);
+
+    return results.rows[0];
+  }
+
   async function create(shoe) {
     let data = [ 
       shoe.color.charAt(0).toUpperCase() + (shoe.color).slice(1), 
@@ -106,6 +127,9 @@ module.exports = function ShoeService(pool) {
     increaseStock,
     deleteById,
     allByBrandSizeColor,
+    allByBrandSize,
+    allByBrand,
+    allBySize,
     createCart,
     allFromBasket,
     deleteFromBasket,

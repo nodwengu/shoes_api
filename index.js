@@ -62,7 +62,9 @@ app.get('/', (req, res, next) => {
 });
 
 app.get('/api/shoes', shoesAPI.all);
-// app.get('/api/shoes/brand/:brandname/size/:size', shoesAPI.allByBrandSize);
+app.get('/api/shoes/brand/:brandname', shoesAPI.allByBrand);
+app.get('/api/shoes/size/:size', shoesAPI.allBySize);
+app.get('/api/shoes/brand/:brandname/size/:size', shoesAPI.allByBrandSize);
 app.get('/api/shoes/brand/:brandname/size/:size/color/:color', shoesAPI.allByBrandSizeColor);
 app.get('/api/shoes/delete/:id', shoesAPI.deleteShoe);
 app.post('/api/shoes/sold/:id', shoesAPI.updateStock);
