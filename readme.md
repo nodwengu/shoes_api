@@ -7,11 +7,10 @@
 For development, you will only need Node.js and a node global package, npm, installed in your environement.
 
 ## Prerequisites
-Things you need to install the software and how to install them?
+Things you need to install and how to install them?
 - NodeJS
 - PostgreSQL
 - Package.json dependencies
-- Mocha
 
 ### Node
 - #### Node installation on Windows
@@ -138,14 +137,10 @@ CREATE TABLE basket(
 ```
 To install all dependencies required for the app to run, on the terminal navigate to the shoes_api folder, and type npm install .
 
-### Mocha Setup
-
-
 ## Running the app locally
 The app is deployed at Heroku and gitHub.
 
 ### Prerequisites
-The best practices in this article assume that you have:
 
 - Node.js and npm installed.
 - an existing Node.js app.
@@ -163,11 +158,22 @@ The shoes api App is deployed on Heroku
 - run the server using $ heroku open command.
 - navigate to your web browser and type <http://localhost:5001/> on the url input.
 
+## API routes
+| HTTP Method | Route name |Description |
+| ------ | ------ | ------ |
+| GET | /api/shoes |  List all shoes in stock |
+| GET | /api/shoes/brand/:brandname |  List all shoes for a given brand |
+| GET | /api/shoes/size/:size |  List all shoes for a given size |
+| GET | /api/shoes/brand/:brandname/size/:size |  List all shoes for a given brand and size |
+| GET | /api/shoes/brand/:brandname/size/:size/color/:color |  List all shoes for a given brand, color and size |
+| POST | /api/shoes/sold/:id |  Update the stock levels when a shoe is sold |
+| POST | /api/shoes |  Add a new new shoe to his stock. |
+
 ## Built With
-- MLAB - Cloud MongoDB server
-- NPM - Dependency Management
-- Bootstrap - The web framework used
-- 
+- [PostgreSQL](https://www.postgresql.org/)
+- [NPM](https://www.npmjs.com/) - Dependency Management
+- [Materialisecss](https://materializecss.com/) - The web framework used
+
 ## Author
 - Thanduxolo Nodwengu
 
