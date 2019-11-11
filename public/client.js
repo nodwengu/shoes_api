@@ -178,7 +178,6 @@ document.addEventListener('DOMContentLoaded', function () {
   };
 
   async function addToCart() {
-    //reduce stock for the currrently selected item by one
     try {
       let selectedColorOption = colorSelectElem.options[colorSelectElem.selectedIndex].value;
       let selectedSizeOption = sizeSelectElem.options[sizeSelectElem.selectedIndex].value;
@@ -342,10 +341,10 @@ document.addEventListener('DOMContentLoaded', function () {
             in_stock: inStockVal,
             imgurl: imageVal,
           });
-          // let input_fields = document.querySelectorAll('#form-input input');
-          // input_fields.forEach(input => {
-          //   input.value = "";
-          // });
+          let input_fields = document.querySelectorAll('#form-input input');
+          input_fields.forEach(input => {
+            input.value = "";
+          });
           document.querySelector('.successMessage').innerHTML = "Shoe was added successfully.";
           document.querySelector('.successMessage').style.display = "block";
           setTimeout(function () {
@@ -356,6 +355,7 @@ document.addEventListener('DOMContentLoaded', function () {
           // showDropdowns();
         }
         showDropdowns();
+      
       } else {
         errorsElem.innerHTML = errorsTemplateInstance({ errors });
       }
