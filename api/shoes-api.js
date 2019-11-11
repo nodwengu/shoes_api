@@ -13,6 +13,40 @@ module.exports = function (shoeService) {
     }
   };
 
+  async function allByBrand(req, res, next) {
+    try {
+      let brand = req.params.brandname;
+     
+      let results = await shoeService.allByBrand(brand);
+
+      res.json({
+        status: 'success',
+        data: results
+      });
+    }
+    catch (error) {
+      next(error);
+    }
+
+  }
+
+  async function allBySize(req, res, next) {
+    try {
+      let size = req.params.size;
+     
+      let results = await shoeService.allBySize(size);
+
+      res.json({
+        status: 'success',
+        data: results
+      });
+    }
+    catch (error) {
+      next(error);
+    }
+
+  }
+
   async function allByBrandSizeColor(req, res, next) {
     try {
       let brand = req.params.brandname;
@@ -20,6 +54,24 @@ module.exports = function (shoeService) {
       let color = req.params.color;
 
       let results = await shoeService.allByBrandSizeColor(brand, size, color);
+
+      res.json({
+        status: 'success',
+        data: results
+      });
+    }
+    catch (error) {
+      next(error);
+    }
+
+  }
+
+  async function allByBrandSize(req, res, next) {
+    try {
+      let brand = req.params.brandname;
+      let size = req.params.size;
+     
+      let results = await shoeService.allByBrandSize(brand, size);
 
       res.json({
         status: 'success',
@@ -188,6 +240,9 @@ module.exports = function (shoeService) {
     updateStock,
     addStock,
     deleteShoe,
+    allByBrand,
+    allBySize,
+    allByBrandSize,
     allByBrandSizeColor,
     createCart,
     allFromBasket,
