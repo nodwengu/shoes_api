@@ -1,39 +1,75 @@
 module.exports = function ShoeService(pool) {
 
   async function all() {
-    let query = `SELECT * FROM shoes`;
+    let query = `SELECT * FROM shoes s 
+                  INNER JOIN brands b ON s.brand_id = b.id
+                  INNER JOIN colors c ON s.color_id = c.id`;
     let results = await pool.query(query);
 
-    return await results.rows;
+    return results.rows;
   }
 
-  async function allByBrandSizeColor(theBrand, theSize, theColor) {
-    let query = `SELECT * FROM shoes WHERE brand = $1 AND size = $2 AND color = $3`;
-    let results = await pool.query(query, [theBrand, theSize, theColor]);
+  async function allByBrand(brand) {
+    let query = `SELECT s.shoe_id, s.color_id, c.color_name, s.brand_id, b.brand_name, s.price, s.size, s.in_stock, s.imgurl
+                  FROM shoes s
+                  INNER JOIN brands b ON s.brand_id = b.id
+                  INNER JOIN colors c ON s.color_id = c.id
+                  WHERE b.brand_name = '${brand}'`;
+
+    let results = await pool.query(query);
 
     return results.rows[0];
   }
 
-  async function allByBrandSize(theBrand, theSize) {
-    let query = `SELECT * FROM shoes WHERE brand = $1 AND size = $2`;
-    let results = await pool.query(query, [theBrand, theSize]);
+  async function allByColor(color) {
+    let query = `SELECT s.shoe_id, s.color_id, c.color_name, s.brand_id, b.brand_name, s.price, s.size, s.in_stock, s.imgurl
+                  FROM shoes s
+                  INNER JOIN brands b ON s.brand_id = b.id
+                  INNER JOIN colors c ON s.color_id = c.id
+                  WHERE c.color_name = '${color}'`;
+
+    let results = await pool.query(query);
 
     return results.rows[0];
   }
 
-  async function allByBrand(theBrand) {
-    let query = `SELECT * FROM shoes WHERE brand = $1`;
-    let results = await pool.query(query, [theBrand]);
+  async function allBySize(size) {
+    let query = `SELECT s.shoe_id, s.color_id, c.color_name, s.brand_id, b.brand_name, s.price, s.size, s.in_stock, s.imgurl
+                  FROM shoes s
+                  INNER JOIN brands b ON s.brand_id = b.id
+                  INNER JOIN colors c ON s.color_id = c.id
+                  WHERE s.size = '${size}'`;
+
+    let results = await pool.query(query);
 
     return results.rows[0];
   }
 
-  async function allBySize(theSize) {
-    let query = `SELECT * FROM shoes WHERE size = $1`;
-    let results = await pool.query(query, [theSize]);
+  async function allByBrandSize(brand, size) {
+    let query = `SELECT s.shoe_id, s.color_id, c.color_name, s.brand_id, b.brand_name, s.price, s.size, s.in_stock, s.imgurl 
+                  FROM shoes s
+                  INNER JOIN brands b ON s.brand_id = b.id
+                  INNER JOIN colors c ON s.color_id = c.id
+                  WHERE b.brand_name = '${brand}' AND s.size = ${size}`;
+
+    let results = await pool.query(query);
 
     return results.rows[0];
   }
+
+  async function allByBrandSizeColor(brand, size, color) {
+    let query = `SELECT s.shoe_id, s.color_id, c.color_name, s.brand_id, b.brand_name, s.price, s.size, s.in_stock, s.imgurl 
+                  FROM shoes s
+                  INNER JOIN brands b ON s.brand_id = b.id
+                  INNER JOIN colors c ON s.color_id = c.id
+                  WHERE b.brand_name = '${brand}' AND s.size = ${size} AND c.color_name = '${color}'`;
+    
+    let results = await pool.query(query);
+
+    return results.rows[0];
+  }
+
+  
 
   async function create(shoe) {
     let data = [ 
@@ -81,8 +117,8 @@ module.exports = function ShoeService(pool) {
 
     let data = [
       shoe.shoe_id,
-      shoe.color.charAt(0).toUpperCase() + (shoe.color).slice(1),
-      shoe.brand.charAt(0).toUpperCase() + (shoe.brand).slice(1),
+      shoe.color_id,
+      shoe.brand_id,
       shoe.price,
       shoe.size,
       shoe.in_stock,
@@ -119,6 +155,23 @@ module.exports = function ShoeService(pool) {
   }
 
 
+  async function allColors() {
+    let query = `SELECT DISTINCT color_name FROM colors
+                ORDER BY color_name ASC`;
+    let results = await pool.query(query);
+    
+    return results.rows;
+  }
+
+  async function allBrands() {
+    let query = `SELECT DISTINCT brand_name FROM brands
+                  ORDER BY brand_name ASC`;
+    let results = await pool.query(query);
+    
+    return results.rows;
+  }
+
+
   return {
     all,
     create,
@@ -130,10 +183,17 @@ module.exports = function ShoeService(pool) {
     allByBrandSize,
     allByBrand,
     allBySize,
+    allByColor,
     createCart,
     allFromBasket,
     deleteFromBasket,
     getOneBasket,
-    updateBasketQuantity
+    updateBasketQuantity,
+
+
+
+    allColors,
+    allBrands,
+
   };
 };
