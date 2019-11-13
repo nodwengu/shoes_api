@@ -50,9 +50,9 @@
          {{#if basketList}}
             {{#each basketList}}
                <tr>
-                  <td>{{color}}</td>
+                  <td>{{color_id}}</td>
                   <td>{{size}}</td>
-                  <td>{{brand}}</td>
+                  <td>{{brand_id}}</td>
                   <td>{{price}}</td>
                   <td>{{quantity}}</td>
                </tr>
@@ -64,7 +64,7 @@
       <script type="text/x-handlebars-template" class="myTemplate">
          <div class="animated fadeIn">
             <img src="{{imgurl}}"> 
-            <p>We have <span style="font-weight: 800; margin: 0 0px 0 0;">{{in_stock}} {{color}} {{brand}} </span>  
+            <p>We have <span style="font-weight: 800; margin: 0 0px 0 0;">{{in_stock}} {{color_name}} {{brand_name}} </span>  
             shoes in stock at a price of <span style="font-weight: 800;">R{{price}}</span> each</p>
          </div>
       </script>
@@ -72,7 +72,7 @@
       <script type="text/x-handlebars-template" class="colorsTemplate">
          <option value="" selected>Choose your color</option>
          {{#each colors}}
-            <option class='colorOption' name='{{this}}' value='{{this}}'> {{this}} </option>
+            <option class='colorOption' name='{{color_name}}' value='{{color_name}}'> {{color_name}} </option>
          {{/each}}
       </script>
 
@@ -86,7 +86,7 @@
       <script type="text/x-handlebars-template" class="brandsTemplate">
          <option value="" selected>Choose your brand</option>
          {{#each brands}}
-            <option class='brandOption' value='{{this}}'> {{this}} </option>
+            <option class='brandOption' value='{{brand_name}}'> {{brand_name}} </option>
          {{/each}}
       </script>
 
@@ -97,6 +97,22 @@
             {{/each}}
          </ul>
      </script>
+
+
+     <script type="text/x-handlebars-template" class="addColorTemplate">
+      <option value="" selected>Choose your color</option>
+      {{#each colors}}
+         <option class='colorOption' name='{{color_name}}' value='{{color_name}}'> {{color_name}} </option>
+      {{/each}}
+   </script>
+
+   <script type="text/x-handlebars-template" class="addBrandTemplate">
+      <option value="" selected>Choose your color</option>
+      {{#each brands}}
+         <option class='colorOption' name='{{brand_name}}' value='{{brand_name}}'> {{brand_name}} </option>
+      {{/each}}
+   </script>
+
    </header>
    
    <div class="container" style="width: 90%;">
@@ -125,7 +141,7 @@
                            <a class="waves-effect #ef5350 red lighten-1 btn search" id="searchBtn"><i class="material-icons left">search</i>SEARCH</a>
                            <div class="option-group ">
                               <span class="">Color</span>
-                              <select id="colorSelect" class="browser-default colorOptions">
+                              <select class="browser-default colorSelect colorOptions">
                                  <option value="" disabled selected>Choose your color</option>
                                  <!-- <option value="Red">Red</option> -->
                                  
@@ -133,14 +149,14 @@
                            </div>
                            <div class="option-group ">
                               <span>Size&nbsp;&nbsp;&nbsp;</span>
-                              <select id="sizeSelect" class="browser-default sizeOptions">
+                              <select id="sizeSelect" class="browser-default sizeSelect sizeSelect sizeOptions">
                                  <option value="" disabled selected>Choose your size</option>
                                  <!-- <option value="5">5</option> -->
                               </select>
                            </div>
                            <div class="option-group ">
                               <span>Brand</span>
-                              <select id="brandSelect" class="browser-default brandOptions">
+                              <select class="browser-default brandSelect brandOptions">
                                  <option value="" disabled selected>Choose your brand</option>
                                  <!-- <option value="Nike">Nike</option> -->
                               </select>
@@ -204,17 +220,24 @@
             </div>
             <div class="row card horizontal" id="form-input">
                <div class="col s7 m7">
-                  <div class="input-field">
-                     <label for="color">Color</label>
-                     <input id="color" type="text" class="validate">
+                  <div class="option-group ">
+                     <span class="">Color</span>
+                     <select class="browser-default colorSelect addColorOption">
+                        <option value="" disabled selected>Choose your color</option>
+                        <!-- <option value="Red">Red</option> -->
+                        
+                     </select>
                   </div>
                   <div class="input-field">
                      <label for="size">Size</label>
                      <input id="size" type="number" class="validate">
                   </div>
-                  <div class="input-field">
-                     <label for="brand">Brand</label>
-                     <input id="brand" type="text" class="validate">
+                  <div class="option-group ">
+                     <span>Brand</span>
+                     <select class="browser-default brandSelect addBrandOption">
+                        <option value="" disabled selected>Choose your brand</option>
+                        <!-- <option value="Nike">Nike</option> -->
+                     </select>
                   </div>
                   <div class="input-field">
                      <label for="price">Price</label>
