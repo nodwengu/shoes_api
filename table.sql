@@ -37,8 +37,6 @@ CREATE TABLE basket(
     foreign key (shoe_id) references shoes(shoe_id)
 );
 
+INSERT INTO colors(color_name) VALUES('Red'),('Black'),('White'),('Pink');
 
-INSERT INTO shoes(color_id, brand_id, price, size, in_stock, imgurl) VALUES(6, 3, 800, 10, 10, './images/redNike.jpeg'), (7, 4, 500, 10, 20, './images/blackAdidas.jpeg');
-
-INSERT INTO basket(brand_name, color_id,color_name, brand_id, price, size, in_stock, imgurl) VALUES("Nike","Red", 6, 3, 800, 10, 10, './images/redNike.jpeg'));
-
+INSERT INTO brands(brand_name) VALUES('Nike'),('Adidas'),('Puma'),('Allstar');
