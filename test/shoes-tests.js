@@ -21,9 +21,9 @@ describe('The Shoes Catalogue', function () {
   it('should be able to add new shoes to the storage', async () => {
     const createShoe = CreateShoe(pool);
 
-    let data1 = { color: 'red', brand: 'adidas', size: 10, price: 500,  in_stock: 20, imgurl: './images/redNike.jpeg' };
-    let data2 = { color: 'blue', brand: 'nike', price: 100, size: 8, in_stock: 10, imgurl: './images/redNike.jpeg' };
- 
+    let data1 = { color_id: 1, brand_id: 1, size: 9, price: 500,  in_stock: 20, imgurl: './images/redNike.jpeg' };
+    let data2 = { color_id: 2, brand_id: 2, size: 10, price: 500,  in_stock: 20, imgurl: './images/blackAdidas.jpeg' };
+
     await createShoe.create(data1);
     await createShoe.create(data2);
 
@@ -33,8 +33,8 @@ describe('The Shoes Catalogue', function () {
 
   it('should be able to list all shoes in stock', async () => {
     const createShoe = CreateShoe(pool);
-    let data1 = { color: 'red', brand: 'adidas', size: 10, price: 500,  in_stock: 20, imgurl: './images/redNike.jpeg' };
-    let data2 = { color: 'blue', brand: 'nike', price: 100, size: 8, in_stock: 10, imgurl: './images/redNike.jpeg' };
+    let data1 = { color_id: 1, brand_id: 1, size: 9, price: 500,  in_stock: 20, imgurl: './images/redNike.jpeg' };
+    let data2 = { color_id: 2, brand_id: 2, size: 10, price: 500,  in_stock: 20, imgurl: './images/blackAdidas.jpeg' };
  
     await createShoe.create(data1);
     await createShoe.create(data2);
@@ -45,41 +45,41 @@ describe('The Shoes Catalogue', function () {
 
   it('should be able to return a shoes for a given brand and size', async () => {
     const createShoe = CreateShoe(pool);
-    let data2 = { color: 'blue', brand: 'nike', price: 100, size: 8, in_stock: 10, imgurl: './images/redNike.jpeg' };
+    let data2 = { color_id: 2, brand_id: 2, size: 10, price: 500,  in_stock: 20, imgurl: './images/blackAdidas.jpeg' };
  
     await createShoe.create(data2);
 
-    let results = await createShoe.allByBrandSize('Nike', 8);
+    let results = await createShoe.allByBrandSize('Adidas', 10);
     chai.assert.typeOf(results, 'object');
   });
 
   it('should be able to return a shoes for a given brand and size and color', async () => {
     const createShoe = CreateShoe(pool);
-    let data2 = { color: 'blue', brand: 'nike', price: 100, size: 8, in_stock: 10, imgurl: './images/redNike.jpeg' };
+    let data2 = { color_id: 2, brand_id: 2, size: 10, price: 500,  in_stock: 20, imgurl: './images/blackAdidas.jpeg' };
  
     await createShoe.create(data2);
 
-    let results = await createShoe.allByBrandSizeColor('Nike', 8, 'Blue');
+    let results = await createShoe.allByBrandSizeColor('Adidas', 10, 'Black');
     chai.assert.typeOf(results, 'object');
   });
 
   it('should be able to return a shoes for a given brand', async () => {
     const createShoe = CreateShoe(pool);
-    let data2 = { color: 'blue', brand: 'nike', price: 100, size: 8, in_stock: 10, imgurl: './images/redNike.jpeg' };
+    let data2 = { color_id: 2, brand_id: 2, size: 10, price: 500,  in_stock: 20, imgurl: './images/blackAdidas.jpeg' };
  
     await createShoe.create(data2);
 
-    let results = await createShoe.allByBrand('Nike', 8, 'Blue');
+    let results = await createShoe.allByBrand('Adidas');
     chai.assert.typeOf(results, 'object');
   });
 
   it('should be able to return a shoes for a given size', async () => {
     const createShoe = CreateShoe(pool);
-    let data2 = { color: 'blue', brand: 'nike', price: 100, size: 8, in_stock: 10, imgurl: './images/redNike.jpeg' };
+    let data2 = { color_id: 2, brand_id: 2, size: 10, price: 500,  in_stock: 20, imgurl: './images/blackAdidas.jpeg' };
  
     await createShoe.create(data2);
 
-    let results = await createShoe.allBySize(8);
+    let results = await createShoe.allBySize(10);
     chai.assert.typeOf(results, 'object');
   });
 

@@ -40,7 +40,5 @@ CREATE TABLE basket(
 
 INSERT INTO shoes(color_id, brand_id, price, size, in_stock, imgurl) VALUES(6, 3, 800, 10, 10, './images/redNike.jpeg'), (7, 4, 500, 10, 20, './images/blackAdidas.jpeg');
 
-INSERT INTO basket(color, brand, price, size, in_stock, shoe_id) VALUES('red','nike', 800, 10, 10, 49);
-
 INSERT INTO basket(brand_name, color_id,color_name, brand_id, price, size, in_stock, imgurl) VALUES("Nike","Red", 6, 3, 800, 10, 10, './images/redNike.jpeg'));
 

@@ -205,13 +205,9 @@ document.addEventListener('DOMContentLoaded', function () {
         if(shoe !== undefined) {
           // Increasing quantity in the basket for existing shoe item
           await shoeService.updateQuantity(shoe.shoe_id);
-          let shoeHTML = shoeTemplateInstance(selectedShoe);
-          selectedShoeElem.innerHTML = shoeHTML;
         } else {
           // Adding new shoe to the basket/cart
           await shoeService.addToBasket(selectedShoe);
-          let shoeHTML = shoeTemplateInstance(selectedShoe);
-          selectedShoeElem.innerHTML = shoeHTML;
         }
 
         let shoeHTML = shoeTemplateInstance(selectedShoe);
@@ -221,7 +217,8 @@ document.addEventListener('DOMContentLoaded', function () {
       } else {
         addToCartBtn.style.display = "none";
       }
-
+      let shoeHTML = shoeTemplateInstance(selectedShoe);
+      selectedShoeElem.innerHTML = shoeHTML;
     } catch (error) {
       console.error(error);
     }
