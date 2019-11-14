@@ -61,11 +61,11 @@ sudo apt-get install postgresql postgresql-contrib
 
 Once you have all the above installed you need to setup the database.
 
-Create a database called `database_name` and username - `username` with a password of `password`. Enter the password when prompted after executing the `createuser` command. 
+Create a database called `shoes_api_db` and username - `coder` with a password of `pg123`. Enter the password when prompted after executing the `createuser` command. 
 
 ```
-sudo -u postgres createdb database_name;
-sudo -u postgres createuser username -P;
+sudo -u postgres createdb shoes_api_db;
+sudo -u postgres createuser coder -P;
 ```
 
 Now run *psql* as the *postgres* user:
@@ -74,41 +74,56 @@ Now run *psql* as the *postgres* user:
 sudo -u postgres psql;
 ```
 
-Grant the `username` user access to the `database_name` database by running this command: 
+Grant the `coder` user access to the `shoes_api_db` database by running this command: 
 
 ```
-grant all privileges on database database_name to username;
+grant all privileges on database shoes_api_db to coder;
 ```
 
 Type in `\q` to exit *psql* as the *postgres* user.
 
-Connect to your database using: `psql -d database_name`
+Connect to your database using: `psql -d shoes_api_db`
 
-Execute these SQL commands to create the `shoes` and `basket` table in your database. 
+Execute these SQL commands to create the `colors`, `brands`, `shoes` and `basket` table in your database. 
 
 You can copy and paste the script below into psql or your can run the database script inside psql using `\i database.sql`
 
 ```sql
 
+CREATE TABLE brands(
+    id SERIAL NOT NULL PRIMARY KEY,
+    brand_name TEXT NOT NULL
+);
+
+CREATE TABLE colors(
+    id SERIAL NOT NULL PRIMARY KEY,
+    color_name TEXT NOT NULL
+);
+
 CREATE TABLE shoes(
-    shoe_id SERIAL NOT NULL  PRIMARY KEY,
-    color TEXT NOT NULL,
-    brand TEXT NOT NULL, 
+    shoe_id SERIAL NOT NULL PRIMARY KEY,
+    color_id INT NOT NULL,
+    brand_id INT NOT NULL, 
     price NUMERIC(12,2) NOT NULL,
     size INT NOT NULL,
     in_stock INT NOT NULL,
-    imgurl TEXT NOT NULL
+    imgurl TEXT NOT NULL,
+    foreign key (color_id) references colors(id),
+    foreign key (brand_id) references brands(id)
 );
 
 CREATE TABLE basket(
     id SERIAL NOT NULL  PRIMARY KEY,
-    color TEXT NOT NULL,
-    brand TEXT NOT NULL, 
+    brand_name TEXT NOT NULL,
+    brand_id INT NOT NULL,
+    color_id INT NOT NULL, 
+    color_name TEXT NOT NULL,
     price NUMERIC(12,2) NOT NULL,
     size INT NOT NULL,
     in_stock INT NOT NULL,
     imgurl TEXT NOT NULL,
     shoe_id INT NOT NULL,
+    quantity INT NOT NULL DEFAULT 1,
     foreign key (shoe_id) references shoes(shoe_id)
 );
 ```
