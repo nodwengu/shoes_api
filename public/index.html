@@ -50,9 +50,9 @@
          {{#if basketList}}
             {{#each basketList}}
                <tr>
-                  <td>{{color_id}}</td>
+                  <td>{{color_name}}</td>
                   <td>{{size}}</td>
-                  <td>{{brand_id}}</td>
+                  <td>{{brand_name}}</td>
                   <td>{{price}}</td>
                   <td>{{quantity}}</td>
                </tr>
@@ -112,6 +112,13 @@
          <option class='colorOption' name='{{brand_name}}' value='{{brand_name}}'> {{brand_name}} </option>
       {{/each}}
    </script>
+
+   <!-- <script type="text/x-handlebars-template" class="addSizeTemplate">
+      <option value="" selected>Choose your size</option>
+      {{#each sizes}}
+         <option class='sizeOption' value='{{this}}'> {{this}} </option>
+      {{/each}}
+   </script> -->
 
    </header>
    
@@ -232,6 +239,15 @@
                      <label for="size">Size</label>
                      <input id="size" type="number" class="validate">
                   </div>
+
+                  <!-- <div class="option-group ">
+                     <span>Sizes</span>
+                     <select class="browser-default sizeSelect addSizeOption">
+                        <option value="" disabled selected>Choose the sized</option>
+                        
+                     </select>
+                  </div> -->
+
                   <div class="option-group ">
                      <span>Brand</span>
                      <select class="browser-default brandSelect addBrandOption">
