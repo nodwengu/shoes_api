@@ -21,18 +21,6 @@ module.exports = function ShoeService(pool) {
     return results.rows[0];
   }
 
-  async function allByColor(color) {
-    let query = `SELECT s.shoe_id, s.color_id, c.color_name, s.brand_id, b.brand_name, s.price, s.size, s.in_stock, s.imgurl
-                  FROM shoes s
-                  INNER JOIN brands b ON s.brand_id = b.id
-                  INNER JOIN colors c ON s.color_id = c.id
-                  WHERE c.color_name = '${color}'`;
-
-    let results = await pool.query(query);
-
-    return results.rows[0];
-  }
-
   async function allBySize(size) {
     let query = `SELECT s.shoe_id, s.color_id, c.color_name, s.brand_id, b.brand_name, s.price, s.size, s.in_stock, s.imgurl
                   FROM shoes s
@@ -69,19 +57,17 @@ module.exports = function ShoeService(pool) {
     return results.rows[0];
   }
 
-  
-
   async function create(shoe) {
     let data = [ 
-      shoe.color.charAt(0).toUpperCase() + (shoe.color).slice(1), 
-      shoe.brand.charAt(0).toUpperCase() + (shoe.brand).slice(1), 
+      shoe.color_id, 
+      shoe.brand_id, 
       shoe.price, 
       shoe.size, 
       shoe.in_stock, 
       shoe.imgurl 
     ];
 
-    let query = `INSERT INTO shoes(color,brand,price,size,in_stock,imgurl) VALUES($1, $2, $3, $4, $5, $6)`;
+    let query = `INSERT INTO shoes(color_id, brand_id,price,size,in_stock,imgurl) VALUES($1, $2, $3, $4, $5, $6)`;
 
     let results = pool.query(query, data);
     return results;
@@ -106,7 +92,12 @@ module.exports = function ShoeService(pool) {
   }
 
   async function increaseStock(id) {
-    return pool.query(`UPDATE shoes SET in_stock = in_stock + 1 WHERE shoe_id = $1`, [id]);
+    let query = `UPDATE shoes 
+                  SET in_stock = in_stock + (SELECT quantity FROM basket WHERE shoe_id = ${id}) 
+                  WHERE shoe_id = ${id}`;
+   
+    let results = await pool.query(query);
+    return results;
   }
 
   async function deleteById(id) {
@@ -114,22 +105,21 @@ module.exports = function ShoeService(pool) {
   }
 
   async function createCart(shoe) {
-
     let data = [
-      shoe.shoe_id,
-      shoe.color_id,
       shoe.brand_id,
-      shoe.price,
-      shoe.size,
-      shoe.in_stock,
+      shoe.brand_name,
+      shoe.color_id,
+      shoe.color_name,
       shoe.imgurl,
-     
+      shoe.in_stock,
+      shoe.price,
+      shoe.shoe_id,
+      shoe.size
     ];
   
-    let results = await pool.query(`INSERT INTO basket(shoe_id,color,brand,price,size,in_stock,imgurl) 
-          VALUES($1, $2, $3, $4, $5, $6, $7)
-          returning id`, data);
-    return results.rows[0];
+    let results = await pool.query(`INSERT INTO basket(brand_id, brand_name, color_id, color_name, imgurl, in_stock, price, shoe_id, size) 
+          VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9)`, data);
+    return results;
   }
 
   async function allFromBasket() {
@@ -139,12 +129,12 @@ module.exports = function ShoeService(pool) {
     return await results.rows;
   }
 
-  async function deleteFromBasket() {
-    return pool.query('DELETE FROM basket');
+  async function deleteFromBasket(id) {
+    return await pool.query('DELETE FROM basket WHERE shoe_id = $1', [id]);
   }
 
   async function getOneBasket(brand, size, color) {
-    let query = `SELECT * FROM basket WHERE brand = $1 AND size = $2 AND color = $3`;
+    let query = `SELECT * FROM basket WHERE brand_name = $1 AND size = $2 AND color_name = $3`;
     let results = await pool.query(query, [brand, size, color]);
 
     return results.rows[0];
@@ -156,7 +146,7 @@ module.exports = function ShoeService(pool) {
 
 
   async function allColors() {
-    let query = `SELECT DISTINCT color_name FROM colors
+    let query = `SELECT DISTINCT id, color_name FROM colors
                 ORDER BY color_name ASC`;
     let results = await pool.query(query);
     
@@ -164,11 +154,26 @@ module.exports = function ShoeService(pool) {
   }
 
   async function allBrands() {
-    let query = `SELECT DISTINCT brand_name FROM brands
+    let query = `SELECT DISTINCT id, brand_name FROM brands
                   ORDER BY brand_name ASC`;
     let results = await pool.query(query);
     
     return results.rows;
+  }
+
+  async function colorByName(name) {
+    let query = `SELECT * FROM colors WHERE color_name = '${name}'`;
+    let results = await pool.query(query);
+    
+    return results.rows[0];
+  }
+
+
+  async function brandByName(name) {
+    let query = `SELECT * FROM brands WHERE brand_name = '${name}'`;
+    let results = await pool.query(query);
+    
+    return results.rows[0];
   }
 
 
@@ -183,7 +188,6 @@ module.exports = function ShoeService(pool) {
     allByBrandSize,
     allByBrand,
     allBySize,
-    allByColor,
     createCart,
     allFromBasket,
     deleteFromBasket,
@@ -194,6 +198,9 @@ module.exports = function ShoeService(pool) {
 
     allColors,
     allBrands,
+
+    colorByName,
+    brandByName
 
   };
 };
