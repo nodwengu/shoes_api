@@ -32,21 +32,6 @@ module.exports = function (shoeService) {
 
   }
 
-  async function allByColor(req, res, next) {
-    try {
-      let color = req.params.color;
-  
-      let results = await shoeService.allByColor(color);
-      res.json({
-        status: 'success',
-        data: results
-      });
-    }
-    catch (error) {
-      next(error);
-    }
-
-  }
 
   async function allBySize(req, res, next) {
     try {
@@ -208,7 +193,7 @@ module.exports = function (shoeService) {
 
   async function deleteFromBasket(req, res, next) {
     try {
-      await shoeService.deleteFromBasket();
+      await shoeService.deleteFromBasket(req.params.id);
       res.json({
         status: 'success',
       });
@@ -277,6 +262,32 @@ module.exports = function (shoeService) {
     }
   }
 
+  async function getColorByName(req, res, next) {
+    try {
+      let results = await shoeService.colorByName(req.params.name);
+      res.json({
+        status: "success",
+        data: results
+      });
+      
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  async function getBrandByName(req, res, next) {
+    try {
+      let results = await shoeService.brandByName(req.params.name);
+      res.json({
+        status: "success",
+        data: results
+      });
+      
+    } catch (err) {
+      next(err);
+    }
+  }
+
   return {
     all,
     add,
@@ -286,7 +297,6 @@ module.exports = function (shoeService) {
     deleteShoe,
     allByBrand,
     allBySize,
-    allByColor,
     allByBrandSize,
     allByBrandSizeColor,
     createCart,
@@ -296,6 +306,8 @@ module.exports = function (shoeService) {
     increaseQuantity,
 
     getAllBrands,
-    getAllColors
+    getAllColors,
+    getColorByName,
+    getBrandByName
   };
 };
