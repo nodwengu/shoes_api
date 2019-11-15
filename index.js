@@ -81,10 +81,12 @@ app.post('/api/basket/updateQuantity/:id', shoesAPI.increaseQuantity);
 app.get('/api/colors', shoesAPI.getAllColors);
 app.get('/api/brands', shoesAPI.getAllBrands);
 app.get('/api/sizes', shoesAPI.getAllSizes);
+// app.get('/api/images/:imgurl', shoesAPI.getAllImages);
 
 app.get('/api/colors/:name', shoesAPI.getColorByName);
 app.get('/api/brands/:name', shoesAPI.getBrandByName);
 app.get('/api/sizes/:size', shoesAPI.getSizeByName);
+
 
 app.use(errorHandler);
 

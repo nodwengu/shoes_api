@@ -1,36 +1,40 @@
 module.exports = function ShoeService(pool) {
 
   async function all() {
-    let query = `SELECT * FROM shoes s 
+    let query = `SELECT s.shoe_id, c.color_name, b.brand_name, s.price, size.size, s.in_stock, s.imgurl
+                  FROM shoes s 
                   INNER JOIN brands b ON s.brand_id = b.id
-                  INNER JOIN colors c ON s.color_id = c.id`;
+                  INNER JOIN colors c ON s.color_id = c.id
+                  INNER JOIN sizes size ON s.size_id = size.id`;
     let results = await pool.query(query);
 
     return results.rows;
   }
 
   async function allByBrand(brand) {
-    let query = `SELECT s.shoe_id, s.color_id, c.color_name, s.brand_id, b.brand_name, s.price, s.size, s.in_stock, s.imgurl
+    let query = `SELECT s.shoe_id, c.color_name, b.brand_name, s.price, size.size, s.in_stock, s.imgurl
                   FROM shoes s
                   INNER JOIN brands b ON s.brand_id = b.id
                   INNER JOIN colors c ON s.color_id = c.id
+                  INNER JOIN sizes size ON s.size_id = size.id
                   WHERE b.brand_name = '${brand}'`;
 
     let results = await pool.query(query);
 
-    return results.rows[0];
+    return results.rows;
   }
 
   async function allBySize(size) {
-    let query = `SELECT s.shoe_id, s.color_id, c.color_name, s.brand_id, b.brand_name, s.price, s.size, s.in_stock, s.imgurl
+    let query = `SELECT s.shoe_id, c.color_name, b.brand_name, s.price, size.size, s.in_stock, s.imgurl
                   FROM shoes s
                   INNER JOIN brands b ON s.brand_id = b.id
                   INNER JOIN colors c ON s.color_id = c.id
-                  WHERE s.size = '${size}'`;
+                  INNER JOIN sizes size ON s.size_id = size.id
+                  WHERE size.size = '${size}'`;
 
     let results = await pool.query(query);
 
-    return results.rows[0];
+    return results.rows;
   }
 
   async function allByBrandSize(brand, size) {
@@ -38,12 +42,12 @@ module.exports = function ShoeService(pool) {
                   FROM shoes shoe
                   INNER JOIN brands b ON shoe.brand_id = b.id
                   INNER JOIN colors c ON shoe.color_id = c.id
-                  INNER JOIN sizes s ON shoe.size_id = s.id
+                  INNER JOIN sizes s ON shoe.size_id = s.id 
                   WHERE b.brand_name = '${brand}' AND s.size = '${size}' `;
 
     let results = await pool.query(sql);
 
-    return results.rows[0];
+    return results.rows;
   }
 
   async function create(shoe) {

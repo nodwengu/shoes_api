@@ -55,21 +55,6 @@ document.addEventListener('DOMContentLoaded', function () {
   // Client side Factory function
   const shoeService = ShoeService();
 
-  // function getSorted(arr) {
-  //   return arr.sort(function (a, b) { return a - b; });
-  // }
-
-  
-
-  // function getSizes(arr) {
-  //   let newArr = arr.map((item) => {
-  //     return item.size;
-  //   });
-  //   //return Array.from(new Set(newArr)).sort();
-  //   let sizes = Array.from(new Set(newArr)).sort();
-  //   return getSorted(sizes);
-  // }
-
   async function showDropdowns() {
     try {
       let sizeResults = await shoeService.getSizes();
