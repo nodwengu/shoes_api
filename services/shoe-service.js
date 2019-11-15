@@ -150,7 +150,7 @@ module.exports = function ShoeService(pool) {
 
   async function allSizes() {
     let query = `SELECT DISTINCT size, id FROM sizes
-                  ORDER BY size DESC`;
+                  ORDER BY size ASC`;
     let results = await pool.query(query);
     
     return results.rows;
