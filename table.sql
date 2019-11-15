@@ -31,11 +31,9 @@ CREATE TABLE shoes(
 CREATE TABLE basket(
     id SERIAL NOT NULL  PRIMARY KEY,
     brand_name TEXT NOT NULL,
-    brand_id INT NOT NULL,
-    color_id INT NOT NULL, 
     color_name TEXT NOT NULL,
     price NUMERIC(12,2) NOT NULL,
-    size INT NOT NULL,
+    size TEXT NOT NULL,
     in_stock INT NOT NULL,
     imgurl TEXT NOT NULL,
     shoe_id INT NOT NULL,
