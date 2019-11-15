@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const addColorTemplateInstance = Handlebars.compile(addColorTemplate.innerHTML);
   const addBrandTemplateInstance = Handlebars.compile(addBrandTemplate.innerHTML);
 
-  //const addSizeTemplateInstance = Handlebars.compile(addSizeTemplate.innerHTML);
+  const addSizeTemplateInstance = Handlebars.compile(addSizeTemplate.innerHTML);
 
   const colorsTemplateInstance = Handlebars.compile(colorsTemplate.innerHTML);
   const sizesTemplateInstance = Handlebars.compile(sizesTemplate.innerHTML);
@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   const addColorsOptionsElem = document.querySelector('.addColorOption');
   const addBrandsOptionsElem = document.querySelector('.addBrandOption');
-  //const addSizesOptionsElem = document.querySelector('.addSizeOption');
+  const addSizesOptionsElem = document.querySelector('.addSizeOption');
 
   const colorsOptionsElem = document.querySelector('.colorOptions');
   const sizesOptionsElem = document.querySelector('.sizeOptions');
@@ -55,24 +55,11 @@ document.addEventListener('DOMContentLoaded', function () {
   // Client side Factory function
   const shoeService = ShoeService();
 
-  function getSorted(arr){
-    return arr.sort(function(a, b){ return a - b; });
-  }
-  
-  function getSizes(arr) {
-    let newArr = arr.map((item) => {
-      return item.size; 
-    });
-    //return Array.from(new Set(newArr)).sort();
-    let sizes = Array.from(new Set(newArr)).sort();
-    return getSorted(sizes);
-  }
-
   async function showDropdowns() {
     try {
-      let results = await shoeService.getAllShoes();
-      let response = results.data;
-      let data = response.data;
+      let sizeResults = await shoeService.getSizes();
+      let sizesResponse = sizeResults.data;
+      let sizes = sizesResponse.data;
 
       let colorsResult = await shoeService.getColors();
       let colorsResponse = colorsResult.data;
@@ -82,22 +69,17 @@ document.addEventListener('DOMContentLoaded', function () {
       let brandsResponse = brandsResult.data;
       let brands = brandsResponse.data;
       
-     
       let colorsHTML = colorsTemplateInstance({ colors });
-
-      let sizesHTML = sizesTemplateInstance({sizes: getSizes(data) });
-
       let brandsHTML = brandsTemplateInstance({ brands }); 
+      let sizesHTML = sizesTemplateInstance({ sizes });
 
       let addColorsHTML = addColorTemplateInstance({ colors });
       let addBrandsHTML = addBrandTemplateInstance({ brands });
-
-      //let addSizesHTML = addSizeTemplateInstance({sizes: getSizes(data) });
-
+      let addSizesHTML = addSizeTemplateInstance({ sizes });
 
       addColorsOptionsElem.innerHTML = addColorsHTML;
       addBrandsOptionsElem.innerHTML = addBrandsHTML;
-      //addSizesOptionsElem.innerHTML = addSizesHTML;
+      addSizesOptionsElem.innerHTML = addSizesHTML;
 
       brandsOptionsElem.innerHTML = brandsHTML;
       sizesOptionsElem.innerHTML = sizesHTML;
@@ -153,7 +135,7 @@ document.addEventListener('DOMContentLoaded', function () {
       if (errors.length === 0) {
         errorsElem.innerHTML = '';
 
-        let response = await shoeService.getByBrandSizeColor(selectedBrandOption, selectedSizeOption, selectedColorOption);
+        let response = await shoeService.getByBrandSize(selectedBrandOption, selectedSizeOption);
         let result = response.data;
         let selectedShoe = result.data;
     
@@ -188,8 +170,8 @@ document.addEventListener('DOMContentLoaded', function () {
       let selectedColorOption = colorSelectElem.options[colorSelectElem.selectedIndex].value;
       let selectedSizeOption = sizeSelectElem.options[sizeSelectElem.selectedIndex].value;
       let selectedBrandOption = brandSelectElem.options[brandSelectElem.selectedIndex].value;
-     
-      let response = await shoeService.getByBrandSizeColor(selectedBrandOption, selectedSizeOption, selectedColorOption);
+      
+      let response = await shoeService.getByBrandSize(selectedBrandOption, selectedSizeOption);
       let result = response.data;
       let selectedShoe = result.data;
       
@@ -198,10 +180,10 @@ document.addEventListener('DOMContentLoaded', function () {
         // updates stock in shoes table
         await shoeService.updateStock(id);
         
-        let cartResult = await shoeService.getOneFromCart(selectedBrandOption, selectedSizeOption, selectedColorOption);
+        let cartResult = await shoeService.getOneFromCart(selectedBrandOption, selectedSizeOption);
         let cartResponse = cartResult.data;
         let shoe = cartResponse.data;
-
+       
         if(shoe !== undefined) {
           // Increasing quantity in the basket for existing shoe item
           await shoeService.updateQuantity(shoe.shoe_id);
@@ -215,10 +197,18 @@ document.addEventListener('DOMContentLoaded', function () {
 
         showBasket();
       } else {
-        addToCartBtn.style.display = "none";
+        document.querySelector('.errorMsg').style.display = "block";
+        document.querySelector('.errorMsg').innerHTML = "Item: OUT OF STOCK";
+        document.querySelector('.shoeInfo').classList.add('animated', 'fadeIn', 'warning'); 
+
+        setTimeout(function () {
+          // Reload the current page without the browser cache
+          location.reload(true);
+        }, 2000);
+        
       }
-      let shoeHTML = shoeTemplateInstance(selectedShoe);
-      selectedShoeElem.innerHTML = shoeHTML;
+      // let shoeHTML = shoeTemplateInstance(selectedShoe);
+      // selectedShoeElem.innerHTML = shoeHTML;
     } catch (error) {
       console.error(error);
     }
@@ -235,7 +225,7 @@ document.addEventListener('DOMContentLoaded', function () {
           let elem = basketData[i];
           
           // check if you can find the element on the shoes list
-          let response = await shoeService.getByBrandSizeColor(elem.brand_name, elem.size, elem.color_name);
+          let response = await shoeService.getByBrandSize(elem.brand_name, elem.size);
           let result = response.data;
           let selectedShoe = result.data;
 
@@ -278,9 +268,10 @@ document.addEventListener('DOMContentLoaded', function () {
       //Get user input values
       let selectedAddColorOption = addColorsOptionsElem.options[addColorsOptionsElem.selectedIndex].value;
       let selectedAddBrandOption = addBrandsOptionsElem.options[addBrandsOptionsElem.selectedIndex].value;
+      let selectedAddSizeOption = addSizesOptionsElem.options[addSizesOptionsElem.selectedIndex].value;
 
       let colorVal = selectedAddColorOption.toLowerCase();
-      let sizeVal = document.querySelector('#size').value;
+      let sizeVal = selectedAddSizeOption;
       let brandVal = selectedAddBrandOption.toLowerCase();
       let priceVal = Number(document.querySelector('#price').value);
       let inStockVal = Number(document.querySelector('#quantity').value);
@@ -315,9 +306,10 @@ document.addEventListener('DOMContentLoaded', function () {
       }
 
       brandVal = brandVal.charAt(0).toUpperCase() + brandVal.slice(1);
-      colorVal = colorVal.charAt(0).toUpperCase() + colorVal.slice(1); 
+      colorVal = colorVal.charAt(0).toUpperCase() + colorVal.slice(1);
+
       if (errors.length === 0) {
-        let response = await shoeService.getByBrandSizeColor(brandVal, sizeVal, colorVal);
+        let response = await shoeService.getByBrandSize(brandVal, sizeVal);
         let result = response.data;
         let selectedShoe = result.data;
     
@@ -351,12 +343,16 @@ document.addEventListener('DOMContentLoaded', function () {
           let colorResponse = colorResults.data;
           let colorId = colorResponse.data.id;
 
+          let sizeResults = await shoeService.getSizeByName(sizeVal);
+          let sizeResponse = sizeResults.data;
+          let sizeId = sizeResponse.data.id;
+
           //add it to the shoes
           let input = {
             color_id: colorId,
             brand_id: brandId,
+            size_id: sizeId,
             price: priceVal,
-            size: sizeVal,
             in_stock: inStockVal,
             imgurl: imageVal
           };
@@ -420,6 +416,10 @@ function ShoeService() {
     return axios.get('/api/brands');
   }
 
+  function getSizes() {
+    return axios.get('/api/sizes');
+  }
+
   function getByBrand(brand) {
     return axios.get(`/api/shoes/brand/${brand}`);
   }
@@ -434,10 +434,6 @@ function ShoeService() {
 
   function getByBrandSize(brand, size) {
     return axios.get(`/api/shoes/brand/${brand}/size/${size}`);
-  }
-
-  function getByBrandSizeColor(brand, size, color) {
-    return axios.get(`/api/shoes/brand/${brand}/size/${size}/color/${color}`);
   }
 
   function updateStock(id) {
@@ -468,8 +464,8 @@ function ShoeService() {
     return axios.get(`/api/cart/delete/${id}`);
   }
 
-  function getOneFromCart(brand, size, color) {
-    return axios.get(`/api/basket/brand/${brand}/size/${size}/color/${color}`);
+  function getOneFromCart(brand, size) {
+    return axios.get(`/api/basket/brand/${brand}/size/${size}`);
   }
 
   function updateQuantity(id) {
@@ -484,8 +480,8 @@ function ShoeService() {
     return axios.get(`/api/colors/${name}`);
   }
 
-  function getColorByName(name) {
-    return axios.get(`/api/colors/${name}`);
+  function getSizeByName(size) {
+    return axios.get(`/api/sizes/${size}`);
   }
 
 
@@ -501,9 +497,6 @@ function ShoeService() {
     addStock,
     addShoe,
     update,
-
-    getByBrandSizeColor,
-
     getAllFromBasket,
     addToBasket,
     clearBasket,
@@ -512,7 +505,9 @@ function ShoeService() {
 
     getColors,
     getBrands,
+    getSizes,
     getBrandByName,
-    getColorByName
+    getColorByName,
+    getSizeByName
   };
 }
