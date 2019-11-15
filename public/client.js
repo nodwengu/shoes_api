@@ -216,10 +216,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
   async function cancelBasket() {
     try {
+      
       let basketResponse = await shoeService.getAllFromBasket();
       let basketResult = basketResponse.data;
       let basketData = basketResult.data;
-
+    
       if(basketData.length > 0) {
         for(let i = 0; i < basketData.length; i++) {
           let elem = basketData[i];
@@ -228,8 +229,9 @@ document.addEventListener('DOMContentLoaded', function () {
           let response = await shoeService.getByBrandSize(elem.brand_name, elem.size);
           let result = response.data;
           let selectedShoe = result.data;
-
+      
           if(selectedShoe.shoe_id === elem.shoe_id) {
+            alert("add stock back to shoes and clear the basket"  );
             await shoeService.addStock(elem.shoe_id);
             await shoeService.clearBasket(elem.shoe_id);
           }
@@ -346,7 +348,7 @@ document.addEventListener('DOMContentLoaded', function () {
           let sizeResults = await shoeService.getSizeByName(sizeVal);
           let sizeResponse = sizeResults.data;
           let sizeId = sizeResponse.data.id;
-
+          
           //add it to the shoes
           let input = {
             color_id: colorId,
