@@ -79,7 +79,7 @@
       <script type="text/x-handlebars-template" class="sizesTemplate">
          <option value="" selected>Choose your size</option>
          {{#each sizes}}
-            <option class='sizeOption' value='{{this}}'> {{this}} </option>
+            <option class='sizeOption' value='{{size}}'> {{size}} </option>
          {{/each}}
       </script>
 
@@ -98,7 +98,6 @@
          </ul>
      </script>
 
-
      <script type="text/x-handlebars-template" class="addColorTemplate">
       <option value="" selected>Choose your color</option>
       {{#each colors}}
@@ -113,12 +112,12 @@
       {{/each}}
    </script>
 
-   <!-- <script type="text/x-handlebars-template" class="addSizeTemplate">
+   <script type="text/x-handlebars-template" class="addSizeTemplate">
       <option value="" selected>Choose your size</option>
       {{#each sizes}}
-         <option class='sizeOption' value='{{this}}'> {{this}} </option>
+         <option class='sizeOption' name="{{size}}" value='{{size}}'> {{size}} </option>
       {{/each}}
-   </script> -->
+   </script>
 
    </header>
    
@@ -235,18 +234,18 @@
                         
                      </select>
                   </div>
-                  <div class="input-field">
+                  <!-- <div class="input-field">
                      <label for="size">Size</label>
                      <input id="size" type="number" class="validate">
-                  </div>
+                  </div> -->
 
-                  <!-- <div class="option-group ">
+                  <div class="option-group ">
                      <span>Sizes</span>
                      <select class="browser-default sizeSelect addSizeOption">
                         <option value="" disabled selected>Choose the sized</option>
                         
                      </select>
-                  </div> -->
+                  </div>
 
                   <div class="option-group ">
                      <span>Brand</span>

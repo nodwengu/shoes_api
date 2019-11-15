@@ -16,10 +16,7 @@ module.exports = function (shoeService) {
   async function allByBrand(req, res, next) {
     try {
       let brand = req.params.brandname;
-  
       let results = await shoeService.allByBrand(brand);
-
-      
 
       res.json({
         status: 'success',
@@ -50,28 +47,9 @@ module.exports = function (shoeService) {
 
   }
 
-  async function allByBrandSizeColor(req, res, next) {
-    try {
-      let brand = req.params.brandname;
-      let size = req.params.size;
-      let color = req.params.color;
-
-      let results = await shoeService.allByBrandSizeColor(brand, size, color);
-
-      res.json({
-        status: 'success',
-        data: results
-      });
-    }
-    catch (error) {
-      next(error);
-    }
-
-  }
-
   async function allByBrandSize(req, res, next) {
     try {
-      let brand = req.params.brandname;
+      let brand = req.params.brand;
       let size = req.params.size;
      
       let results = await shoeService.allByBrandSize(brand, size);
@@ -206,9 +184,8 @@ module.exports = function (shoeService) {
     try {
       let brand = req.params.brandname;
       let size = req.params.size;
-      let color = req.params.color;
 
-      let results = await shoeService.getOneBasket(brand, size, color);
+      let results = await shoeService.getOneBasket(brand, size);
 
       res.json({
         status: 'success',
@@ -262,6 +239,19 @@ module.exports = function (shoeService) {
     }
   }
 
+  async function getAllSizes(req, res, next) {
+    try {
+      let results = await shoeService.allSizes();
+      res.json({
+        status: "success",
+        data: results
+      });
+      
+    } catch (err) {
+      next(err);
+    }
+  }
+
   async function getColorByName(req, res, next) {
     try {
       let results = await shoeService.colorByName(req.params.name);
@@ -282,7 +272,18 @@ module.exports = function (shoeService) {
         status: "success",
         data: results
       });
-      
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  async function getSizeByName(req, res, next) {
+    try {
+      let results = await shoeService.sizeByName(req.params.size);
+      res.json({
+        status: "success",
+        data: results
+      });
     } catch (err) {
       next(err);
     }
@@ -298,7 +299,7 @@ module.exports = function (shoeService) {
     allByBrand,
     allBySize,
     allByBrandSize,
-    allByBrandSizeColor,
+   
     createCart,
     allFromBasket,
     deleteFromBasket,
@@ -307,7 +308,9 @@ module.exports = function (shoeService) {
 
     getAllBrands,
     getAllColors,
+    getAllSizes,
     getColorByName,
-    getBrandByName
+    getBrandByName,
+    getSizeByName
   };
 };

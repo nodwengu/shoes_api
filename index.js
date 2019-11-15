@@ -64,10 +64,10 @@ app.get('/', (req, res, next) => {
 app.get('/api/shoes', shoesAPI.all);
 app.get('/api/shoes/brand/:brandname', shoesAPI.allByBrand);
 app.get('/api/shoes/size/:size', shoesAPI.allBySize);
-app.get('/api/shoes/brand/:brandname/size/:size', shoesAPI.allByBrandSize);
-app.get('/api/shoes/brand/:brandname/size/:size/color/:color', shoesAPI.allByBrandSizeColor);
+app.get('/api/shoes/brand/:brand/size/:size', shoesAPI.allByBrandSize);
 app.get('/api/shoes/delete/:id', shoesAPI.deleteShoe);
 app.post('/api/shoes/sold/:id', shoesAPI.updateStock);
+
 app.post('/api/shoes/cancel/:id', shoesAPI.addStock);
 app.post('/api/shoes', shoesAPI.add);
 app.post('/api/shoes/update', shoesAPI.update);
@@ -75,13 +75,16 @@ app.post('/api/shoes/update', shoesAPI.update);
 app.get('/api/cart', shoesAPI.allFromBasket);
 app.post('/api/cart', shoesAPI.createCart);
 app.get('/api/cart/delete/:id', shoesAPI.deleteFromBasket);
-app.get('/api/basket/brand/:brandname/size/:size/color/:color', shoesAPI.getOneFromCart);
+app.get('/api/basket/brand/:brandname/size/:size', shoesAPI.getOneFromCart);
 app.post('/api/basket/updateQuantity/:id', shoesAPI.increaseQuantity);
 
 app.get('/api/colors', shoesAPI.getAllColors);
 app.get('/api/brands', shoesAPI.getAllBrands);
+app.get('/api/sizes', shoesAPI.getAllSizes);
+
 app.get('/api/colors/:name', shoesAPI.getColorByName);
 app.get('/api/brands/:name', shoesAPI.getBrandByName);
+app.get('/api/sizes/:size', shoesAPI.getSizeByName);
 
 app.use(errorHandler);
 
