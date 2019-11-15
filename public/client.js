@@ -231,7 +231,6 @@ document.addEventListener('DOMContentLoaded', function () {
           let selectedShoe = result.data;
       
           if(selectedShoe.shoe_id === elem.shoe_id) {
-            alert("add stock back to shoes and clear the basket"  );
             await shoeService.addStock(elem.shoe_id);
             await shoeService.clearBasket(elem.shoe_id);
           }
