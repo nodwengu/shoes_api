@@ -12,7 +12,7 @@ CREATE TABLE colors(
 
 CREATE TABLE sizes(
     id SERIAL NOT NULL PRIMARY KEY,
-    size TEXT NOT NULL
+    size INT NOT NULL
 );
 
 CREATE TABLE shoes(
