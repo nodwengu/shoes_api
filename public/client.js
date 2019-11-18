@@ -200,7 +200,7 @@ document.addEventListener('DOMContentLoaded', function () {
         document.querySelector('.errorMsg').style.display = "block";
         document.querySelector('.errorMsg').innerHTML = "Item: OUT OF STOCK";
         document.querySelector('.shoeInfo').classList.add('animated', 'fadeIn', 'warning'); 
-
+        document.querySelector('#addToCart').display = "none";
         setTimeout(function () {
           // Reload the current page without the browser cache
           location.reload(true);
