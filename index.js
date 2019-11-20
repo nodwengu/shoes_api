@@ -55,11 +55,11 @@ function errorHandler(err, req, res, next) {
 
 app.use(cookieParser('keyboard_cat'));
 
-app.get('/', (req, res, next) => {
-  res.json({
-    home: 'The home page!!'
-  });
-});
+// app.get('/', (req, res, next) => {
+//   res.json({
+//     home: 'The home page!!'
+//   });
+// });
 
 app.get('/api/shoes', shoesAPI.all);
 app.get('/api/shoes/brand/:brandname', shoesAPI.allByBrand);
@@ -81,7 +81,6 @@ app.post('/api/basket/updateQuantity/:id', shoesAPI.increaseQuantity);
 app.get('/api/colors', shoesAPI.getAllColors);
 app.get('/api/brands', shoesAPI.getAllBrands);
 app.get('/api/sizes', shoesAPI.getAllSizes);
-// app.get('/api/images/:imgurl', shoesAPI.getAllImages);
 
 app.get('/api/colors/:name', shoesAPI.getColorByName);
 app.get('/api/brands/:name', shoesAPI.getBrandByName);

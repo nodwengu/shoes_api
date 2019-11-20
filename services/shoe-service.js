@@ -47,7 +47,8 @@ module.exports = function ShoeService(pool) {
 
     let results = await pool.query(sql);
 
-    return results.rows[0];
+    return results.rows;
+    // return results.rows[0];
   }
 
   async function create(shoe) {

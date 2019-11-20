@@ -112,5 +112,19 @@ img {
 }
 
 
+.showShoes {
+  display: grid;
+  grid-template-columns:auto auto auto auto;
+  grid-column-gap: 10px;
+  margin: 5% 0 0 0;
+}
+
+.allShoes {
+  display: grid;
+  grid-template-columns: auto auto auto auto;
+  grid-column-gap: 10px;
+  margin: 5% 0 0 0;
+}
+
 
 
