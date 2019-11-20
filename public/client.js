@@ -138,11 +138,9 @@ document.addEventListener('DOMContentLoaded', function () {
     showFilteredShoesElem.innerHTML = "";
     document.querySelector('.errorMsg').style.display = "block";
     document.querySelector('.errorMsg').innerHTML = "Item: OUT OF STOCK";
-    document.querySelector('.shoeInfo').innerHTML = "No Data Found...";
-    document.querySelector('.shoeInfo').classList.add('animated', 'fadeIn', 'warning'); 
     setTimeout(function () {
       document.querySelector('.errorMsg').style.display = "none";
-    }, 2000);
+    }, 3000);
   }
 
   function showSuccessMessage() {

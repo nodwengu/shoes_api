@@ -27,9 +27,8 @@ select {
 }
 
 .card.horizontal {
-  padding: 3%;
+  padding: 4% 2% 1% 2%;
 }
-
 .option-group {
   display: flex;
   align-items: baseline;
@@ -53,6 +52,8 @@ img {
   color: #fff;
   background-color: #EF534F;
 }
+
+
 
 .warning {
   margin: 10px 0;
@@ -126,5 +127,14 @@ img {
   margin: 5% 0 0 0;
 }
 
+
+.shoesCard {
+  width: 95%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  /* justify-content: center; */
+}
 
 

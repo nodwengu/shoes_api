@@ -76,7 +76,7 @@
          <script type="text/x-handlebars-template" class="filteredShoesTemplate">
             <div class="animated fadeIn showShoes">
                {{#each selectedShoes}}
-                  <div class="card horizontal " style="display: block">
+                  <div class="card horizontal shoesCard">
                      <div>
                         <img src="{{imgurl}}">
                      </div>
@@ -101,7 +101,7 @@
             <div class="animated fadeIn showShoes">
                {{#each allShoes}}
                <!-- <div class="col s6 m6 card horizontal " style="display: block"></div> -->
-                  <div class="card horizontal " style="display: block">
+                  <div class="card horizontal shoesCard">
                      <div>
                         <img src="{{imgurl}}">
                      </div>
@@ -238,40 +238,42 @@
          </div>
       </div>
 
-      <div class="row">
-         <div class="col s12 m12">
+      <div class="showFilterResults">
+            <div class="errorMsg animated fadeInUp" style="display: none; ">
+                        
+             </div>
             <div class="row">
                   <div class="col s12 m12">
-                     <div class="errorMsg animated fadeInUp" style="display: none; ">
-                  
-                     </div>
-                     <div id="displayData" class="row showFilteredShoes">
-                        <div class="col s12 m12">
-                          
-                        </div>       
-                     </div>
-
+                     <div class="row">
+                           <div class="col s12 m12">
+                              <div id="displayData" class="row showFilteredShoes">
+                                 <div class="col s12 m12">
+                                   
+                                 </div>       
+                              </div>
+         
+                           </div>
+                        </div>
+                  </div>
+         
+               </div>
+         
+               <div class="row">
+                  <div class="col s12 m12">
+                     <div class="row">
+                           <div class="col s12 m12">
+                              <div id="showAll" class="row showAllShoes">
+                                 <div class="col s12 m12">
+                                    
+                                 </div>       
+                              </div>
+                              
+                           </div>
+                        </div>
                   </div>
                </div>
-         </div>
-
       </div>
-
-      <div class="row">
-            <div class="col s12 m12">
-               <div class="row">
-                     <div class="col s12 m12">
-                        <div id="showAll" class="row showAllShoes">
-                           <div class="col s12 m12">
-                             
-                           </div>       
-                        </div>
-                        
-                     </div>
-                  </div>
-            </div>
-   
-         </div>
+     
    </div>
 
 
