@@ -134,6 +134,8 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function outOfStockMessage() {
+    showAllShoesElem.innerHTML = "";
+    showFilteredShoesElem.innerHTML = "";
     document.querySelector('.errorMsg').style.display = "block";
     document.querySelector('.errorMsg').innerHTML = "Item: OUT OF STOCK";
     document.querySelector('.shoeInfo').innerHTML = "No Data Found...";
