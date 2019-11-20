@@ -1,3 +1,4 @@
+
 document.addEventListener('DOMContentLoaded', function () {
   function compileTemplate(selector) {
     let template = document.querySelector(selector);
@@ -5,56 +6,73 @@ document.addEventListener('DOMContentLoaded', function () {
     return templateInstance;
   };
 
+  //Reference template from the DOM by Template class names
+  const colorsTemplate = document.querySelector('.colorsTemplate');
+  const sizesTemplate = document.querySelector('.sizesTemplate');
+  const brandsTemplate = document.querySelector('.brandsTemplate');
+  const filteredShoesTemplate = document.querySelector('.filteredShoesTemplate');
+  const basketTemplate = document.querySelector('.basketTemplate');
+  const allShoesTemplate = document.querySelector('.allShoesTemplate');
+
+  const addColorTemplate = document.querySelector('.addColorTemplate');
+  const addBrandTemplate = document.querySelector('.addBrandTemplate');
+  const addSizeTemplate = document.querySelector('.addSizeTemplate');
+
+  //Creating and compiling template instances
+  const colorsTemplateInstance = Handlebars.compile(colorsTemplate.innerHTML);
+  const sizesTemplateInstance = Handlebars.compile(sizesTemplate.innerHTML);
+  const brandsTemplateInstance = Handlebars.compile(brandsTemplate.innerHTML);
+  const filteredShoesTemplateInstance = Handlebars.compile(filteredShoesTemplate.innerHTML);
+  const basketTemplateInstance = Handlebars.compile(basketTemplate.innerHTML);
+  const errorsTemplateInstance = compileTemplate('.errorsTemplate');
+  const allShoesTemplateInstance = Handlebars.compile(allShoesTemplate.innerHTML);
+
+  const addColorTemplateInstance = Handlebars.compile(addColorTemplate.innerHTML);
+  const addBrandTemplateInstance = Handlebars.compile(addBrandTemplate.innerHTML);
+  const addSizeTemplateInstance = Handlebars.compile(addSizeTemplate.innerHTML);
+
   const searchBtn = document.querySelector('#searchBtn');
-  const addToCartBtn = document.querySelector('#addToCart');
   const cancelBasketBtn = document.querySelector('#cancelCart');
   const checkoutBtn = document.querySelector('#checkoutBtn');
   const addNewBtn = document.querySelector('.addNewBtn');
   const cancelAddNewBtn = document.querySelector('#cancelAddNew');
   const addBtnElem = document.querySelector('#addBtn');
+  const allShoesBtn = document.querySelector('#allShoesBtn');
 
-  const addColorTemplate = document.querySelector('.addColorTemplate');
-  const addBrandTemplate = document.querySelector('.addBrandTemplate');
-  
-  const addSizeTemplate = document.querySelector('.addSizeTemplate');
+  const addToCartBtn = document.querySelector('#displayData');
+  const addToCartBtn2 = document.querySelector('#showAll');
 
-  const colorsTemplate = document.querySelector('.colorsTemplate');
-  const sizesTemplate = document.querySelector('.sizesTemplate');
-  const brandsTemplate = document.querySelector('.brandsTemplate');
-  const shoeTemplate = document.querySelector('.myTemplate');
-  const basketTemplate = document.querySelector('.basketTemplate');
-
-  const addColorTemplateInstance = Handlebars.compile(addColorTemplate.innerHTML);
-  const addBrandTemplateInstance = Handlebars.compile(addBrandTemplate.innerHTML);
-
-  const addSizeTemplateInstance = Handlebars.compile(addSizeTemplate.innerHTML);
-
-  const colorsTemplateInstance = Handlebars.compile(colorsTemplate.innerHTML);
-  const sizesTemplateInstance = Handlebars.compile(sizesTemplate.innerHTML);
-  const brandsTemplateInstance = Handlebars.compile(brandsTemplate.innerHTML);
-  const shoeTemplateInstance = Handlebars.compile(shoeTemplate.innerHTML);
-  const basketTemplateInstance = Handlebars.compile(basketTemplate.innerHTML);
-  let errorsTemplateInstance = compileTemplate('.errorsTemplate');
+  let errorsElem = document.querySelector('.errors');
 
   const colorSelectElem = document.querySelector(".colorSelect");
   const sizeSelectElem = document.querySelector('.sizeSelect');
   const brandSelectElem = document.querySelector('.brandSelect');
 
-  const addColorsOptionsElem = document.querySelector('.addColorOption');
-  const addBrandsOptionsElem = document.querySelector('.addBrandOption');
-  const addSizesOptionsElem = document.querySelector('.addSizeOption');
+  const addColorElem = document.querySelector('.addColorSelect');
+  const addBrandElem = document.querySelector('.addBrandSelect');
+  const addSizeElem = document.querySelector('.addSizeSelect');
 
-  const colorsOptionsElem = document.querySelector('.colorOptions');
-  const sizesOptionsElem = document.querySelector('.sizeOptions');
-  const brandsOptionsElem = document.querySelector('.brandOptions');
-  let errorsElem = document.querySelector('.errors');
-
-  const selectedShoeElem = document.querySelector('.shoeInfo');
-  const cartItemsElem = document.querySelector('.cartItems');
+  const showFilteredShoesElem = document.querySelector('.showFilteredShoes');
+  const showCartItemsElem = document.querySelector('.showCartItems');
+  const showAllShoesElem = document.querySelector('.showAllShoes');
 
   // Client side Factory function
   const shoeService = ShoeService();
 
+  allShoesBtn.addEventListener('click', showAllShoes);
+
+  async function showAllShoes() {
+    showFilteredShoesElem.innerHTML = "";
+    let response = await shoeService.getAllShoes();
+    let results = response.data;
+    let allShoes = results.data;
+    
+    let allShoesHTML = allShoesTemplateInstance({ allShoes });
+    showAllShoesElem.innerHTML = allShoesHTML;
+  }
+
+  
+  
   async function showDropdowns() {
     try {
       let sizeResults = await shoeService.getSizes();
@@ -77,13 +95,13 @@ document.addEventListener('DOMContentLoaded', function () {
       let addBrandsHTML = addBrandTemplateInstance({ brands });
       let addSizesHTML = addSizeTemplateInstance({ sizes });
 
-      addColorsOptionsElem.innerHTML = addColorsHTML;
-      addBrandsOptionsElem.innerHTML = addBrandsHTML;
-      addSizesOptionsElem.innerHTML = addSizesHTML;
+      addColorElem.innerHTML = addColorsHTML;
+      addBrandElem.innerHTML = addBrandsHTML;
+      addSizeElem.innerHTML = addSizesHTML;
 
-      brandsOptionsElem.innerHTML = brandsHTML;
-      sizesOptionsElem.innerHTML = sizesHTML;
-      colorsOptionsElem.innerHTML = colorsHTML;
+      brandSelectElem.innerHTML = brandsHTML;
+      sizeSelectElem.innerHTML = sizesHTML;
+      colorSelectElem.innerHTML = colorsHTML;
 
     } catch (error) {
       console.error(error);
@@ -101,7 +119,7 @@ document.addEventListener('DOMContentLoaded', function () {
         basketList
       });
 
-      cartItemsElem.innerHTML = basketHTML;
+      showCartItemsElem.innerHTML = basketHTML;
 
       basketList.forEach(item => {
         total += Number(item.price * item.quantity);
@@ -115,6 +133,28 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
+  function outOfStockMessage() {
+    document.querySelector('.errorMsg').style.display = "block";
+    document.querySelector('.errorMsg').innerHTML = "Item: OUT OF STOCK";
+    document.querySelector('.shoeInfo').innerHTML = "No Data Found...";
+    document.querySelector('.shoeInfo').classList.add('animated', 'fadeIn', 'warning'); 
+    setTimeout(function () {
+      document.querySelector('.errorMsg').style.display = "none";
+    }, 2000);
+  }
+
+  function showSuccessMessage() {
+    let input_fields = document.querySelectorAll('#form-input input');
+    input_fields.forEach(input => {
+      input.value = "";
+    });
+    document.querySelector('.successMessage').style.display = "block";
+    setTimeout(function () {
+      document.querySelector('.addNew-wrapper').style.display = "none";
+      document.querySelector('.successMessage').style.display = "none";
+    }, 2000);
+  }
+
   async function searchShoe() {
     try {
       let selectedColorOption = colorSelectElem.options[colorSelectElem.selectedIndex].value;
@@ -122,93 +162,97 @@ document.addEventListener('DOMContentLoaded', function () {
       let selectedBrandOption = brandSelectElem.options[brandSelectElem.selectedIndex].value;
 
       let errors = [];
-      if (!selectedColorOption) {
-        errors.push('Select a Color');
-      }
-      if (!selectedSizeOption) {
-        errors.push('Select a Size');
-      }
-      if (!selectedBrandOption) {
-        errors.push('Select a Brand');
-      }
-   
-      if (errors.length === 0) {
-        errorsElem.innerHTML = '';
+      let selectedShoes = [];
+      showAllShoesElem.innerHTML = "";
 
+      if(selectedColorOption == '' && selectedSizeOption == '' && selectedBrandOption !== '') {
+        let response = await shoeService.getByBrand(selectedBrandOption);
+        let result = response.data;
+        selectedShoes = result.data;
+
+        if(selectedShoes.length > 0) {
+          let shoeHTML = filteredShoesTemplateInstance({ selectedShoes });
+          showFilteredShoesElem.innerHTML = shoeHTML;
+        } else {
+          outOfStockMessage();
+        }
+
+      } else if(selectedColorOption == '' && selectedBrandOption == '' && selectedSizeOption !== '') {
+        let response = await shoeService.getBySize(selectedSizeOption);
+        let result = response.data;
+        selectedShoes = result.data;
+
+        if(selectedShoes.length > 0) {
+          let shoeHTML = filteredShoesTemplateInstance({ selectedShoes });
+          showFilteredShoesElem.innerHTML = shoeHTML;
+        } else {
+          outOfStockMessage();
+        } 
+
+      } else if (selectedColorOption == '' && selectedSizeOption !== '' && selectedBrandOption !== '') {
         let response = await shoeService.getByBrandSize(selectedBrandOption, selectedSizeOption);
         let result = response.data;
-        let selectedShoe = result.data;
-    
-        if(selectedShoe) {
-          if(selectedShoe.in_stock == 0) {
-            let shoeHTML = shoeTemplateInstance(selectedShoe);
-            selectedShoeElem.innerHTML = shoeHTML;
-            addToCartBtn.style.display = "none";
-          } else {
-            document.querySelector('.errorMsg').style.display = "none";
-            let shoeHTML = shoeTemplateInstance(selectedShoe);
-            selectedShoeElem.innerHTML = shoeHTML;
-            addToCartBtn.style.display = "block";
-          }          
+        selectedShoes = result.data;
+
+        if(selectedShoes.length > 0) {
+          let shoeHTML = filteredShoesTemplateInstance({ selectedShoes });
+          showFilteredShoesElem.innerHTML = shoeHTML;
         } else {
-          document.querySelector('.errorMsg').style.display = "block";
-          document.querySelector('.errorMsg').innerHTML = "Item: OUT OF STOCK";
-          document.querySelector('.shoeInfo').innerHTML = "No Data Found...";
-          document.querySelector('.shoeInfo').classList.add('animated', 'fadeIn', 'warning'); 
-          addToCartBtn.style.display = "none";
-        }      
+          outOfStockMessage();
+        }
+
       } else {
-        errorsElem.innerHTML = errorsTemplateInstance({ errors });
+        alert("select at least one from dropdown");
       }
+      
     } catch (error) {
       console.error(error);
     }
   };
 
-  async function addToCart() {
+  
+
+  async function addToCart(evt) {
     try {
-      let selectedColorOption = colorSelectElem.options[colorSelectElem.selectedIndex].value;
-      let selectedSizeOption = sizeSelectElem.options[sizeSelectElem.selectedIndex].value;
-      let selectedBrandOption = brandSelectElem.options[brandSelectElem.selectedIndex].value;
-      
-      let response = await shoeService.getByBrandSize(selectedBrandOption, selectedSizeOption);
-      let result = response.data;
-      let selectedShoe = result.data;
-      
-      if (selectedShoe.in_stock > 0) {
-        let id = selectedShoe.shoe_id;
-        // updates stock in shoes table
-        await shoeService.updateStock(id);
-        
-        let cartResult = await shoeService.getOneFromCart(selectedBrandOption, selectedSizeOption);
-        let cartResponse = cartResult.data;
-        let shoe = cartResponse.data;
-       
-        if(shoe !== undefined) {
-          // Increasing quantity in the basket for existing shoe item
-          await shoeService.updateQuantity(shoe.shoe_id);
-        } else {
-          // Adding new shoe to the basket/cart
-          await shoeService.addToBasket(selectedShoe);
+      let cartResponse = await shoeService.getAllFromBasket();
+      let cartResults = cartResponse.data;
+      let basketData = cartResults.data;
+
+      let response = await shoeService.getAllShoes();
+      let results = response.data;
+      let selectedShoes = results.data;
+
+      let id = evt.target.id;
+
+      let shoeFromCart = basketData.filter( item => {
+        return item.shoe_id == id;
+      });
+
+      if(selectedShoes.length > 0) {
+        for (item of selectedShoes) {
+          if(item.shoe_id == id) {
+            if(item.in_stock > 0) {
+              await shoeService.updateStock(id);
+              
+              if(shoeFromCart[0] !== undefined) {
+                // Increasing quantity in the basket for existing shoe item
+                await shoeService.updateQuantity(item.shoe_id);
+              } else {
+                // Adding new shoe to the basket/cart
+                await shoeService.addToBasket(item);
+              }
+
+              // let shoeHTML = filteredShoesTemplateInstance({ selectedShoes });
+              // showFilteredShoesElem.innerHTML = shoeHTML;
+
+            } else {
+              outOfStockMessage();
+            }
+          }
         }
-
-        let shoeHTML = shoeTemplateInstance(selectedShoe);
-        selectedShoeElem.innerHTML = shoeHTML;
-
-        showBasket();
-      } else {
-        document.querySelector('.errorMsg').style.display = "block";
-        document.querySelector('.errorMsg').innerHTML = "Item: OUT OF STOCK";
-        document.querySelector('.shoeInfo').classList.add('animated', 'fadeIn', 'warning'); 
-        document.querySelector('#addToCart').display = "none";
-        setTimeout(function () {
-          // Reload the current page without the browser cache
-          location.reload(true);
-        }, 2000);
-        
+        showBasket();  
       }
-      // let shoeHTML = shoeTemplateInstance(selectedShoe);
-      // selectedShoeElem.innerHTML = shoeHTML;
+      
     } catch (error) {
       console.error(error);
     }
@@ -216,24 +260,24 @@ document.addEventListener('DOMContentLoaded', function () {
 
   async function cancelBasket() {
     try {
-      
-      let basketResponse = await shoeService.getAllFromBasket();
-      let basketResult = basketResponse.data;
-      let basketData = basketResult.data;
+      let cartResponse = await shoeService.getAllFromBasket();
+      let cartResults = cartResponse.data;
+      let basketData = cartResults.data;
+
+      let response = await shoeService.getAllShoes();
+      let results = response.data;
+      let selectedShoes = results.data;
     
       if(basketData.length > 0) {
         for(let i = 0; i < basketData.length; i++) {
           let elem = basketData[i];
-          
-          // check if you can find the element on the shoes list
-          let response = await shoeService.getByBrandSize(elem.brand_name, elem.size);
-          let result = response.data;
-          let selectedShoe = result.data;
-      
-          if(selectedShoe.shoe_id === elem.shoe_id) {
-            await shoeService.addStock(elem.shoe_id);
-            await shoeService.clearBasket(elem.shoe_id);
-          }
+        
+          for (let shoe of selectedShoes) {
+            if(shoe.shoe_id === elem.shoe_id) {
+              await shoeService.addStock(elem.shoe_id);
+              await shoeService.clearBasket(elem.shoe_id);
+            }
+          } 
         }
       }
       // Reload the current page without the browser cache
@@ -267,9 +311,9 @@ document.addEventListener('DOMContentLoaded', function () {
   async function addShoe() {
     try {
       //Get user input values
-      let selectedAddColorOption = addColorsOptionsElem.options[addColorsOptionsElem.selectedIndex].value;
-      let selectedAddBrandOption = addBrandsOptionsElem.options[addBrandsOptionsElem.selectedIndex].value;
-      let selectedAddSizeOption = addSizesOptionsElem.options[addSizesOptionsElem.selectedIndex].value;
+      let selectedAddColorOption = addColorElem.options[addColorElem.selectedIndex].value;
+      let selectedAddBrandOption = addBrandElem.options[addBrandElem.selectedIndex].value;
+      let selectedAddSizeOption = addSizeElem.options[addSizeElem.selectedIndex].value;
 
       let colorVal = selectedAddColorOption.toLowerCase();
       let sizeVal = selectedAddSizeOption;
@@ -310,68 +354,62 @@ document.addEventListener('DOMContentLoaded', function () {
       colorVal = colorVal.charAt(0).toUpperCase() + colorVal.slice(1);
 
       if (errors.length === 0) {
-        let response = await shoeService.getByBrandSize(brandVal, sizeVal);
+        let brandResults = await shoeService.getBrands();
+        let brandResponse = brandResults.data;
+        let brands = brandResponse.data;
+
+        let colorResults = await shoeService.getColors();
+        let colorResponse = colorResults.data;
+        let colors = colorResponse.data;
+
+        let sizeResults = await shoeService.getSizes();
+        let sizeResponse = sizeResults.data;
+        let sizes = sizeResponse.data;
+        
+        let response = await shoeService.getAllShoes();
         let result = response.data;
-        let selectedShoe = result.data;
-    
-        if(selectedShoe) {
+        let selectedShoes = result.data;
+
+        let shoeItem = selectedShoes.filter( item => {
+          return item.color_name == colorVal && item.brand_name == brandVal && item.size == sizeVal;
+        });
+
+        if(shoeItem[0] !== undefined) {
           // Need to update the selected shoe
           await shoeService.update({
-            shoe_id: selectedShoe.shoe_id,
+            shoe_id: shoeItem[0].shoe_id,
             price: priceVal,
             in_stock: inStockVal,
             imgurl: imageVal
           });
-
           document.querySelector('.successMessage').innerHTML = "Shoe was updated successfully.";
-          document.querySelector('.successMessage').style.display = "block";
-          setTimeout(function () {
-            document.querySelector('.addNew-wrapper').style.display = "none";
-            document.querySelector('.successMessage').style.display = "none";
-          }, 2000);
-
-          let input_fields = document.querySelectorAll('#form-input input');
-          input_fields.forEach(input => {
-            input.value = "";
+          showSuccessMessage();
+      
+        } else {
+          let color = colors.filter( color => {
+            return color.color_name == colorVal;
+          });
+          let size = sizes.filter( size => {
+            return size.size == sizeVal;
+          });
+          let brand = brands.filter( brand => {
+            return brand.brand_name == brandVal;
           });
 
-        } else {
-          let brandResults = await shoeService.getBrandByName(brandVal);
-          let brandResponse = brandResults.data;
-          let brandId = brandResponse.data.id;
-
-          let colorResults = await shoeService.getColorByName(colorVal);
-          let colorResponse = colorResults.data;
-          let colorId = colorResponse.data.id;
-
-          let sizeResults = await shoeService.getSizeByName(sizeVal);
-          let sizeResponse = sizeResults.data;
-          let sizeId = sizeResponse.data.id;
-          
           //add it to the shoes
           let input = {
-            color_id: colorId,
-            brand_id: brandId,
-            size_id: sizeId,
+            color_id: color[0].id,
+            brand_id: brand[0].id,
+            size_id: size[0].id,
             price: priceVal,
             in_stock: inStockVal,
             imgurl: imageVal
-          };
-          
+          };   
           await shoeService.addShoe(input);
-
-          let input_fields = document.querySelectorAll('#form-input input');
-          input_fields.forEach(input => {
-            input.value = "";
-          });
           document.querySelector('.successMessage').innerHTML = "Shoe was added successfully.";
-          document.querySelector('.successMessage').style.display = "block";
-          setTimeout(function () {
-            document.querySelector('.addNew-wrapper').style.display = "none";
-            document.querySelector('.successMessage').style.display = "none";
-          }, 2000);
-
-        } 
+          showSuccessMessage();
+        }
+       
       } else {
         errorsElem.innerHTML = errorsTemplateInstance({ errors });
       }
@@ -379,14 +417,16 @@ document.addEventListener('DOMContentLoaded', function () {
     } catch (error) {
       console.error(error);
     }
-
   }
 
   showDropdowns();
   showBasket();
 
   searchBtn.addEventListener('click', searchShoe);
+  addToCartBtn2.addEventListener('click', addToCart);
   addToCartBtn.addEventListener('click', addToCart);
+  
+
   cancelBasketBtn.addEventListener('click', cancelBasket);
   checkoutBtn.addEventListener('click', checkoutBasket);
   addBtnElem.addEventListener('click', addShoe);
@@ -399,8 +439,6 @@ document.addEventListener('DOMContentLoaded', function () {
     showDropdowns();
     document.querySelector('.addNew-wrapper').style.display = "none";
   });
-
-
 });
 
 
