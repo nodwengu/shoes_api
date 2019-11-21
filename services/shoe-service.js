@@ -138,7 +138,7 @@ module.exports = function ShoeService(pool) {
 
 
   async function allColors() {
-    let query = `SELECT DISTINCT color_name, id FROM colors
+    let query = `SELECT DISTINCT(color_name), id FROM colors
                 ORDER BY color_name ASC`;
     let results = await pool.query(query);
     
