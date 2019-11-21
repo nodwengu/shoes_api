@@ -182,6 +182,21 @@ module.exports = function ShoeService(pool) {
     return results.rows[0];
   }
 
+  async function createColor(color) {
+    let sql = `INSERT INTO colors(color_name) VALUES($1)`;
+    return await pool.query(sql, [color.color_name]);
+  }
+
+  async function createBrand(brand) {
+    let sql = `INSERT INTO brands(brand_name) VALUES($1)`;
+    return await pool.query(sql, [brand.brand_name]);
+  }
+
+  async function createSize(obj) {
+    let sql = `INSERT INTO sizes(size) VALUES($1)`;
+    return await pool.query(sql, [obj.size]);
+  }
+
 
   return {
     all,
@@ -208,7 +223,11 @@ module.exports = function ShoeService(pool) {
 
     colorByName,
     brandByName,
-    sizeByName
+    sizeByName,
+
+    createColor,
+    createBrand,
+    createSize
 
   };
 };
