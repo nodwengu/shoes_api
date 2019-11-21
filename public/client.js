@@ -64,6 +64,115 @@ document.addEventListener('DOMContentLoaded', function () {
 
   allShoesBtn.addEventListener('click', showAllShoes);
 
+  function addSelectMessage() {
+    document.querySelector('.addSelectSucess').style.display = "block";
+    document.querySelector('.addSelectSucess').innerHTML = "Successfully added new color";
+    setTimeout(function () {
+      // Reload the current page without the browser cache
+      location.reload(true);
+    }, 2000);
+  }
+  addColorBtn.addEventListener('click', async() => {
+    try {
+      let colorInput = (document.querySelector('#addColorInput').value).toLowerCase();
+      let regex = /^[A-Z]+$/i;
+      let validString = regex.test(colorInput);
+      let validColor = typeof colorInput == 'string' && colorInput.trim() != '';
+      
+      colorInput = colorInput.charAt(0).toUpperCase() + colorInput.slice(1);
+
+      if(validColor && validString) {
+        await shoeService.addColor({ color_name: colorInput });
+
+        document.querySelector('#addColorInput').value = "";
+        addSelectMessage();
+
+      } else {
+        document.querySelector('.selectError').style.display = "block";
+        document.querySelector('.selectError').innerHTML = "Please provide valid input. e.g. Blue, Yellow";
+        setTimeout(function () {
+          document.querySelector('.selectError').style.display = "none";
+          document.querySelector('#addColorInput').value = "";
+          document.querySelector('#addColorInput').focus();
+        }, 3000);
+      }
+    } 
+    catch (error) {
+      console.error(error);
+    }
+    
+  });
+
+  
+  addBrandBtn.addEventListener('click', async() => {
+    try {
+      let brandInput = (document.querySelector('#addBrandInput').value).toLowerCase();
+      let regex = /^[A-Z]+$/i;
+      let validString = regex.test(brandInput);
+      let validBrand = typeof brandInput == 'string' && brandInput.trim() != '';
+      
+      brandInput = brandInput.charAt(0).toUpperCase() + brandInput.slice(1);
+
+      if(validBrand && validString) {
+        await shoeService.addBrand({ brand_name: brandInput });
+        document.querySelector('#addBrandInput').value = "";
+        
+        document.querySelector('.addBrandSuccess').style.display = "block";
+        document.querySelector('.addBrandSuccess').innerHTML = "Successfully added new color";
+        setTimeout(function () {
+          // Reload the current page without the browser cache
+          location.reload(true);
+        }, 2000);
+
+      } else {
+        document.querySelector('.selectBrandError').style.display = "block";
+        document.querySelector('.selectBrandError').innerHTML = "Please provide valid brand. e.g. Adidas, Nike";
+        setTimeout(function () {
+          document.querySelector('.selectBrandError').style.display = "none";
+          document.querySelector('#addBrandInput').value = "";
+          document.querySelector('#addBrandInput').focus();
+        }, 3000);
+      }
+    } 
+    catch (error) {
+      console.error(error);
+    }
+  });
+
+  addSizeBtn.addEventListener('click', async() => {
+    try {
+      let sizeInput = Number(document.querySelector('#addSizeInput').value);
+      let regex = /^[0-9]+$/i;
+      let validString = regex.test(sizeInput);
+      let validSize = sizeInput != '';
+
+      if(validSize && validString) {
+        await shoeService.addSize({ size: sizeInput });
+        document.querySelector('#addSizeInput').value = "";
+        
+        document.querySelector('.addColorSuccess').style.display = "block";
+        document.querySelector('.addColorSuccess').innerHTML = "Successfully added new size";
+        setTimeout(function () {
+          // Reload the current page without the browser cache
+          location.reload(true);
+        }, 2000);
+
+      } else {
+        document.querySelector('.selectSizeError').style.display = "block";
+        document.querySelector('.selectSizeError').innerHTML = "Please provide valid brand. e.g. 5, 8";
+        setTimeout(function () {
+          document.querySelector('.selectSizeError').style.display = "none";
+          document.querySelector('#addSizeInput').value = "";
+          document.querySelector('#addSizeInput').focus();
+        }, 3000);
+      }
+    } 
+    catch (error) {
+      console.error(error);
+    }
+  });
+
+
   async function showAllShoes() {
     try {
       showFilteredShoesElem.innerHTML = "";
@@ -78,6 +187,8 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     
   }
+
+
 
   async function showDropdowns() {
     try {
@@ -214,7 +325,7 @@ document.addEventListener('DOMContentLoaded', function () {
         document.querySelector('.errorMsg').innerHTML = "Item: Filter by (Brand) or (Color) or (Brand & Color)";
         setTimeout(function () {
           document.querySelector('.errorMsg').style.display = "none";
-        }, 5000);
+        }, 7000);
       }
 
     } catch (error) {
@@ -481,121 +592,15 @@ document.addEventListener('DOMContentLoaded', function () {
   checkoutBtn.addEventListener('click', checkoutBasket);
   addBtnElem.addEventListener('click', addShoe);
 
+  addNewBtn.addEventListener('click', () => {
+    document.querySelector('.addNew-wrapper').style.display = "block";
+  });
+
   cancelAddNewBtn.addEventListener('click', () => {
     showDropdowns();
-    document.querySelector('.modal').style.display = "none";
-    // Reload the current page without the browser cache
-    location.reload(true);
+    document.querySelector('.addNew-wrapper').style.display = "none";
   });
 });
-
-function addSelectMessage() {
-  document.querySelector('.addSelectSucess').style.display = "block";
-  document.querySelector('.addSelectSucess').innerHTML = "Successfully added new color";
-  setTimeout(function () {
-    // Reload the current page without the browser cache
-    location.reload(true);
-  }, 2000);
-}
-addColorBtn.addEventListener('click', async() => {
-  try {
-    let colorInput = (document.querySelector('#addColorInput').value).toLowerCase();
-    let regex = /^[A-Z]+$/i;
-    let validString = regex.test(colorInput);
-    let validColor = typeof colorInput == 'string' && colorInput.trim() != '';
-    
-    colorInput = colorInput.charAt(0).toUpperCase() + colorInput.slice(1);
-
-    if(validColor && validString) {
-      await shoeService.addColor({ color_name: colorInput });
-
-      document.querySelector('#addColorInput').value = "";
-      addSelectMessage();
-
-    } else {
-      document.querySelector('.selectError').style.display = "block";
-      document.querySelector('.selectError').innerHTML = "Please provide valid input. e.g. Blue, Yellow";
-      setTimeout(function () {
-        document.querySelector('.selectError').style.display = "none";
-        document.querySelector('#addColorInput').value = "";
-        document.querySelector('#addColorInput').focus();
-      }, 3000);
-    }
-  } 
-  catch (error) {
-    console.error(error);
-  }
-  
-});
-
-
-addBrandBtn.addEventListener('click', async() => {
-  try {
-    let brandInput = (document.querySelector('#addBrandInput').value).toLowerCase();
-    let regex = /^[A-Z]+$/i;
-    let validString = regex.test(brandInput);
-    let validBrand = typeof brandInput == 'string' && brandInput.trim() != '';
-    
-    brandInput = brandInput.charAt(0).toUpperCase() + brandInput.slice(1);
-
-    if(validBrand && validString) {
-      await shoeService.addBrand({ brand_name: brandInput });
-      document.querySelector('#addBrandInput').value = "";
-      
-      document.querySelector('.addBrandSuccess').style.display = "block";
-      document.querySelector('.addBrandSuccess').innerHTML = "Successfully added new color";
-      setTimeout(function () {
-        // Reload the current page without the browser cache
-        location.reload(true);
-      }, 2000);
-
-    } else {
-      document.querySelector('.selectBrandError').style.display = "block";
-      document.querySelector('.selectBrandError').innerHTML = "Please provide valid brand. e.g. Adidas, Nike";
-      setTimeout(function () {
-        document.querySelector('.selectBrandError').style.display = "none";
-        document.querySelector('#addBrandInput').value = "";
-        document.querySelector('#addBrandInput').focus();
-      }, 3000);
-    }
-  } 
-  catch (error) {
-    console.error(error);
-  }
-});
-
-addSizeBtn.addEventListener('click', async() => {
-  try {
-    let sizeInput = Number(document.querySelector('#addSizeInput').value);
-    let regex = /^[0-9]+$/i;
-    let validString = regex.test(sizeInput);
-    let validSize = sizeInput != '';
-
-    if(validSize && validString) {
-      await shoeService.addSize({ size: sizeInput });
-      document.querySelector('#addSizeInput').value = "";
-      document.querySelector('.addColorSuccess').style.display = "block";
-      document.querySelector('.addColorSuccess').innerHTML = "Successfully added new size";
-      setTimeout(function () {
-        // Reload the current page without the browser cache
-        location.reload(true);
-      }, 2000);
-
-    } else {
-      document.querySelector('.selectSizeError').style.display = "block";
-      document.querySelector('.selectSizeError').innerHTML = "Please provide valid brand. e.g. 5, 8";
-      setTimeout(function () {
-        document.querySelector('.selectSizeError').style.display = "none";
-        document.querySelector('#addSizeInput').value = "";
-        document.querySelector('#addSizeInput').focus();
-      }, 3000);
-    }
-  } 
-  catch (error) {
-    console.error(error);
-  }
-});
-
 
 
 function ShoeService() {
