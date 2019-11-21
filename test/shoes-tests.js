@@ -50,7 +50,6 @@ describe('The Shoes Catalogue', function () {
     await createShoe.create(data2);
 
     let results = await createShoe.allByBrandSize('Adidas', 10);
-
     chai.assert.typeOf(results, 'array');
   });
 
