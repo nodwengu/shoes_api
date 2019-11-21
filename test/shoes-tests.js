@@ -50,7 +50,8 @@ describe('The Shoes Catalogue', function () {
     await createShoe.create(data2);
 
     let results = await createShoe.allByBrandSize('Adidas', 10);
-    chai.assert.typeOf(results, 'object');
+
+    chai.assert.typeOf(results, 'array');
   });
 
   // it('should be able to return a shoe for a given brand and size and color', async () => {
