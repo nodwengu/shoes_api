@@ -82,10 +82,13 @@ app.get('/api/colors', shoesAPI.getAllColors);
 app.get('/api/brands', shoesAPI.getAllBrands);
 app.get('/api/sizes', shoesAPI.getAllSizes);
 
+app.post('/api/colors', shoesAPI.addColor);
+app.post('/api/brands', shoesAPI.addBrand);
+app.post('/api/sizes', shoesAPI.addSize);
+
 app.get('/api/colors/:name', shoesAPI.getColorByName);
 app.get('/api/brands/:name', shoesAPI.getBrandByName);
 app.get('/api/sizes/:size', shoesAPI.getSizeByName);
-
 
 app.use(errorHandler);
 

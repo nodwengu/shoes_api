@@ -289,6 +289,51 @@ module.exports = function (shoeService) {
     }
   }
 
+  async function addColor(req, res, next) {
+    try {
+      await shoeService.createColor(req.body);
+      res.json({
+        status: "success"
+      });
+
+    } catch(err) {
+      res.json({
+        status: "error",
+        error: err.stack
+      });
+    }
+  }
+
+  async function addBrand(req, res, next) {
+    try {
+      await shoeService.createBrand(req.body);
+      res.json({
+        status: "success"
+      });
+
+    } catch(err) {
+      res.json({
+        status: "error",
+        error: err.stack
+      });
+    }
+  }
+
+  async function addSize(req, res, next) {
+    try {
+      await shoeService.createSize(req.body);
+      res.json({
+        status: "success"
+      });
+
+    } catch(err) {
+      res.json({
+        status: "error",
+        error: err.stack
+      });
+    }
+  }
+
   return {
     all,
     add,
@@ -311,6 +356,10 @@ module.exports = function (shoeService) {
     getAllSizes,
     getColorByName,
     getBrandByName,
-    getSizeByName
+    getSizeByName,
+
+    addColor,
+    addBrand,
+    addSize
   };
 };

@@ -1,22 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
-  <title>Shoe catalogue</title>
+   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0" />
+   <title>Shoe catalogue</title>
 
-  <!-- CSS  -->
-  <link href="css/animate.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+   <!-- CSS  -->
+   <link href="css/animate.css" type="text/css" rel="stylesheet" media="screen,projection" />
 
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <link href="css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
-  <link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+   <link href="css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection" />
+   <link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection" />
 
-  <!-- <script src="https://unpkg.com/axios/dist/axios.min.js"></script> -->
+   <!-- <script src="https://unpkg.com/axios/dist/axios.min.js"></script> -->
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.11/handlebars.min.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.11/handlebars.min.js"></script>
 </head>
+
 <body>
    <div class="navbar-fixed">
       <nav class="#ef5350 red lighten-1" role="navigation">
@@ -24,27 +26,33 @@
             <a id="logo-container" href="#" class="brand-logo">Logo</a>
             <a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a>
             <ul class="right hide-on-med-and-down">
-               <li class="addNewBtn"><a href="#"><i class="material-icons left">add_box</i>ADD NEW</a></li>
-              
                <li class="showCart"><a href="#">
-                  <a class="fa-stack fa-2x has-badge" data-count="0">
-                     <i class="fa fa-circle fa-stack-2x"></i>
-                     <i class="fa fa-shopping-cart fa-stack-1x fa-inverse"></i>
-                  </a>
+                     <a class="fa-stack fa-2x has-badge" data-count="0">
+                        <i class="fa fa-circle fa-stack-2x"></i>
+                        <i class="fa fa-shopping-cart fa-stack-1x fa-inverse"></i>
+                     </a>
                </li>
-               <!-- <li><span class="new badge" data-badge-caption="custom caption">34</span></li> -->
+               <!-- Modal1 Trigger -->
+               <li class="addNewBtn modal-trigger" data-target="modal1"><a href="#"><i class="material-icons left">add_box</i>ADD SHOE</a></li>
+               <!-- Modal2 Trigger -->
+               <li class="addNewBtn modal-trigger" data-target="modal2"><a href="#"><i class="material-icons left">add_box</i>ADD COLOR</a></li>
+               <!-- Modal3 Trigger -->
+               <li class="addNewBtn modal-trigger" data-target="modal3"><a href="#"><i class="material-icons left">add_box</i>ADD BRAND</a></li>
+               <!-- Modal4 Trigger -->
+               <li class="addNewBtn modal-trigger" data-target="modal4"><a href="#"><i class="material-icons left">add_box</i>ADD SIZE</a></li>
+
             </ul>
             <ul id="nav-mobile" class="sidenav">
-               <li class="addNewBtn"><a href="/shoes.html"><i class="material-icons left">add_box</i>ADD NEW</a></li>
+               <li class="addNewBtn"><a href="#"><i class="material-icons left">add_box</i>ADD NEW</a></li>
                <li class="showCart"><a href="#"><i class="material-icons left">shopping_cart</i>CART</a></li>
-               
+               <li class="addNewBtn"><a href="#"><i class="material-icons left">add_box</i>ADD COLORS</a></li>
             </ul>
          </div>
       </nav>
    </div>
-   
+
    <header>
-         <script type="text/x-template" class="errorsTemplate">
+      <script type="text/x-template" class="errorsTemplate">
             <ul>
                {{#each errors}}
                   <li>{{this}}</li>
@@ -52,32 +60,32 @@
             </ul>
          </script>
 
-         <script type="text/x-handlebars-template" class="colorsTemplate">
+      <script type="text/x-handlebars-template" class="colorsTemplate">
             <option value="" selected>Choose Color</option>
             {{#each colors}}
                <option class='colorOption' id='{{id}}'> {{color_name}} </option>
             {{/each}}
          </script>
-   
-         <script type="text/x-handlebars-template" class="sizesTemplate">
+
+      <script type="text/x-handlebars-template" class="sizesTemplate">
             <option value="" selected>Choose Size</option>
             {{#each sizes}}
                <option class='sizeOption' id='{{id}}'> {{size}} </option>
             {{/each}}
          </script>
-   
-         <script type="text/x-handlebars-template" class="brandsTemplate">
+
+      <script type="text/x-handlebars-template" class="brandsTemplate">
             <option value="" selected>Choose Brand</option>
             {{#each brands}}
                <option class='brandOption' id='{{id}}'> {{brand_name}} </option>
             {{/each}}
          </script>
-         
-         <script type="text/x-handlebars-template" class="filteredShoesTemplate">
+
+      <script type="text/x-handlebars-template" class="filteredShoesTemplate">
             <div class="animated fadeIn showShoes">
                {{#each selectedShoes}}
-                  <div class="card horizontal " style="display: block">
-                     <div>
+                  <div class="card horizontal shoesCard">
+                     <div class="center">
                         <img src="{{imgurl}}">
                      </div>
                      <div> 
@@ -97,12 +105,12 @@
             </div>
          </script>
 
-         <script type="text/x-handlebars-template" class="allShoesTemplate">
+      <script type="text/x-handlebars-template" class="allShoesTemplate">
             <div class="animated fadeIn showShoes">
                {{#each allShoes}}
                <!-- <div class="col s6 m6 card horizontal " style="display: block"></div> -->
-                  <div class="card horizontal " style="display: block">
-                     <div>
+                  <div class="card horizontal shoesCard">
+                     <div class="center">
                         <img src="{{imgurl}}">
                      </div>
                      <div> 
@@ -115,6 +123,7 @@
                         {{#if in_stock}}
                         <a type="submit" class="waves-effect #ef5350 red lighten-1 btn" id="{{shoe_id}}"><i class="material-icons left">add_shopping_cart</i>ADD TO CART</a>
                         {{/if}}
+
                      </div>
                   </div>        
                {{/each}}
@@ -123,7 +132,7 @@
          </script>
 
 
-         <script type="text/x-handlebars-template" class="basketTemplate">
+      <script type="text/x-handlebars-template" class="basketTemplate">
             {{#if basketList}}
                {{#each basketList}}
                   <tr>
@@ -137,28 +146,28 @@
             {{/if}}
          </script>
 
-         <script type="text/x-handlebars-template" class="addColorTemplate">
+      <script type="text/x-handlebars-template" class="addColorTemplate">
             <option value="" selected>Select Color</option>
             {{#each colors}}
                <option class='colorOption' id='{{id}}' value='{{color_name}}'> {{color_name}} </option>
             {{/each}}
          </script>
-      
-         <script type="text/x-handlebars-template" class="addBrandTemplate">
+
+      <script type="text/x-handlebars-template" class="addBrandTemplate">
             <option value="" selected>Select Brand</option>
             {{#each brands}}
                <option class='colorOption' id='{{id}}' value='{{brand_name}}'> {{brand_name}} </option>
             {{/each}}
          </script>
-      
-         <script type="text/x-handlebars-template" class="addSizeTemplate">
+
+      <script type="text/x-handlebars-template" class="addSizeTemplate">
             <option value="" selected>Select Size</option>
             {{#each sizes}}
                <option class='sizeOption' name="{{size}}" value='{{size}}'> {{size}} </option>
             {{/each}}
          </script>
    </header>
-   
+
    <div class="container" style="width: 80%;">
       <div class="errors">
          <!-- <h4>Expecting to see errors!</h4> -->
@@ -167,42 +176,44 @@
          <div class="col s12 m6">
             <div class="section" style="">
                <h4 class="header">Shoe catalogue</h4>
-                  <div class="row card horizontal">     
-                     <div class="col s12 m12">         
-                        <div style="display: flex;justify-content: space-between; align-items: baseline;">
-                           <h5>Filter By:</h5>
-                           <a class="waves-effect #ef5350 red lighten-1 btn search" id="allShoesBtn" style="color:white;">ALL SHOES</a>
+               <div class="row card horizontal">
+                  <div class="col s12 m12">
+                     <div style="display: flex;justify-content: space-between; align-items: baseline;">
+                        <h5>Filter By:</h5>
+                        <a class="waves-effect #ef5350 red lighten-1 btn search" id="allShoesBtn"
+                           style="color:white;">ALL SHOES</a>
 
-                           <a class="waves-effect #ef5350 red lighten-1 btn search" id="searchBtn" style="color:white;"><i class="material-icons left">search</i>SEARCH</a>
-                        </div>
-                        <div class="option-group col s4 m4">
-                           <select class="browser-default colorSelect">
-                              <option value="" disabled selected>Color</option>
-                              <!-- <option value="Red">Red</option> -->
-                           </select>
-                        </div>
-
-                        <div class="option-group col s4 m4">
-                           <select id="sizeSelect" class="browser-default sizeSelect">
-                              <option value="" disabled selected>Size</option>
-                              <!-- <option value="5">5</option> -->
-                           </select>
-                        </div>
-
-                        <div class="option-group col s4 m4">
-                           <!-- <span>Brand</span> -->
-                           <select class="browser-default brandSelect">
-                              <option value="" disabled selected>Brand</option>
-                              <!-- <option value="Nike">Nike</option> -->
-                           </select>
-                        </div>
+                        <a class="waves-effect #ef5350 red lighten-1 btn search" id="searchBtn" style="color:white;"><i
+                              class="material-icons left">search</i>SEARCH</a>
                      </div>
+                     <div class="option-group col s4 m4">
+                        <select class="browser-default colorSelect">
+                           <option value="" disabled selected>Color</option>
+                           <!-- <option value="Red">Red</option> -->
+                        </select>
+                     </div>
+
+                     <div class="option-group col s4 m4">
+                        <select id="sizeSelect" class="browser-default sizeSelect">
+                           <option value="" disabled selected>Size</option>
+                           <!-- <option value="5">5</option> -->
+                        </select>
+                     </div>
+
+                     <div class="option-group col s4 m4">
+                        <!-- <span>Brand</span> -->
+                        <select class="browser-default brandSelect">
+                           <option value="" disabled selected>Brand</option>
+                           <!-- <option value="Nike">Nike</option> -->
+                        </select>
+                     </div>
+                  </div>
                </div>
-            </div>  
+            </div>
          </div>
 
          <div class="col s12 m6">
-            <div class="cartItemsWrapper" >
+            <div class="cartItemsWrapper">
                <div class="section">
                   <h4 class="header">Cart Items</h4>
                   <div class="">
@@ -228,135 +239,192 @@
                            <h6 style="font-weight: 900">Total: R<span class="cartTotal">0.00</span></h6>
                            <div class="" style="margin: 20px 0 0 0;">
                               <a class="waves-effect #ef5350 red lighten-1 btn" id="cancelCart">CANCEL</a>
-                              <a class="waves-effect #ef5350 red lighten-1 btn" id="checkoutBtn"><i class="material-icons left"></i>CHECKOUT</a>
+                              <a class="waves-effect #ef5350 red lighten-1 btn" id="checkoutBtn"><i
+                                    class="material-icons left"></i>CHECKOUT</a>
                            </div>
                         </div>
                      </div>
                   </div>
-               </div>  
+               </div>
             </div>
          </div>
       </div>
 
-      <div class="row">
-         <div class="col s12 m12">
-            <div class="row">
+      <div class="showFilterResults">
+         <div class="errorMsg animated fadeInUp" style="display: none; ">
+
+         </div>
+         <div class="row">
+            <div class="col s12 m12">
+               <div class="row">
                   <div class="col s12 m12">
-                     <div class="errorMsg animated fadeInUp" style="display: none; ">
-                  
-                     </div>
                      <div id="displayData" class="row showFilteredShoes">
                         <div class="col s12 m12">
-                          
-                        </div>       
+
+                        </div>
                      </div>
 
                   </div>
                </div>
+            </div>
+
          </div>
 
-      </div>
-
-      <div class="row">
+         <div class="row">
             <div class="col s12 m12">
                <div class="row">
-                     <div class="col s12 m12">
-                        <div id="showAll" class="row showAllShoes">
-                           <div class="col s12 m12">
-                             
-                           </div>       
+                  <div class="col s12 m12">
+                     <div id="showAll" class="row showAllShoes">
+                        <div class="col s12 m12">
+
                         </div>
-                        
                      </div>
+
                   </div>
+               </div>
             </div>
-   
          </div>
+      </div>
+
    </div>
 
+   <!-- Modal Trigger
+   <button data-target="modal1" class="btn modal-trigger">Modal</button> -->
 
-
-   <div class="container addNew-wrapper animated fadeInUp" style="display:none; width: 90%;">
-      <div class="section">
-         <h4 class="header">Add New Shoe</h4>
-
-         <div class="">
-            <div class="successMessage animated fadeInUp" style="display: none;">
-
-            </div>
-            <div class="errorMessage animated fadeInUp" style="display: none;">
-
-            </div>
-            <div class="row card horizontal" id="form-input">
-               <div class="col s7 m7">
+   <!-- Modal1 Structure -->
+   <div id="modal1" class="modal" style="margin-top: 3%;">
+      <div class="modal-content">
+         <h4 class="center">Add New Shoe</h4>
+         <div class="addNew-wrapper">
+            <div class="row " id="form-input">
+               <div class="col s12 m12">
                   <div class="option-group ">
                      <span class="">Color</span>
                      <select class="browser-default addColorSelect">
                         <option value="" disabled selected>Choose your color</option>
-                        <!-- <option value="Red">Red</option> -->
-                        
+                        <option value="Red">Red</option>
+
                      </select>
                   </div>
-                  <!-- <div class="input-field">
-                     <label for="size">Size</label>
-                     <input id="size" type="number" class="validate">
-                  </div> -->
 
                   <div class="option-group ">
                      <span>Sizes</span>
-                     <select class="browser-default addBrandSelect">
-                        <option value="" disabled selected>Choose the size</option>
-                        
+                     <select class="browser-default addSizeSelect">
+                        <option value="" disabled selected>Choose your size</option>
+                        <!-- <option value="Nike">Nike</option> -->
                      </select>
                   </div>
 
                   <div class="option-group ">
                      <span>Brand</span>
-                     <select class="browser-default addSizeSelect">
-                        <option value="" disabled selected>Choose your brand</option>
-                        <!-- <option value="Nike">Nike</option> -->
-                     </select>
+                     <select class="browser-default addBrandSelect">
+                           <option value="" disabled selected>Choose the brand </option>
+                        </select>
                   </div>
                   <div class="input-field">
                      <label for="price">Price</label>
-                     <input id="price" type="number" class="validate">  
+                     <input id="price" type="number" class="validate">
                   </div>
                   <div class="input-field">
                      <label for="quantity">In Stock</label>
-                     <input id="quantity" type="number" class="validate">  
+                     <input id="quantity" type="number" class="validate">
                   </div>
                   <div class="input-field">
                      <label for="imageUrl">ImgUrl</label>
-                     <input id="imageUrl" type="text" class="validate" value="./images/placeholder.png">  
+                     <input id="imageUrl" type="text" class="validate" value="./images/placeholder.png">
                   </div>
-                  <div class="">
+                  <div class="successMessage animated fadeInUp" style="display: none;"> </div>
+                  <div class="errorMessage animated fadeInUp" style="display: none;"></div>
+                  <div class="right modal-footer">
                      <a class="waves-effect #ef5350 red lighten-1 btn" id="cancelAddNew">CANCEL</a>
                      <a class="waves-effect #ef5350 red lighten-1 btn" id="addBtn"><i class="material-icons left"></i>ADD</a>
                   </div>
-                  
                </div>
-               <div class="col s5 m5"></div>
             </div>
+            
          </div>
-      </div>  
+      </div>
    </div>
 
-    <!-- <script type="text/x-handlebars-template" class="myTemplate">
-         <div class="animated fadeIn">
-            <img src="{{imgurl}}"> 
-            <p>We have <span style="font-weight: 800; margin: 0 0px 0 0;">{{in_stock}} {{color_name}} {{brand_name}} </span>  
-            shoes in stock at a price of <span style="font-weight: 800;">R{{price}}</span> each</p>
+
+   <!-- Modal2 Structure -->
+   <div id="modal2" class="modal" style="margin-top: 3%;">
+      <div class="modal-content">
+         <h4 class="center">Add Color</h4>
+         <div class="addNew-wrapper">
+            <div class="addSelectSucess animated fadeInUp" style="display: none;"></div>
+            <div class="row">
+               <div class="col s12 m12">
+                  <div class="input-field">
+                     <label for="color">Add color e.g Red, Blue, etc</label>
+                     <input id="addColorInput" type="text" class="validate" autofocus>
+                  </div>
+                  <div class="selectError animated fadeInUp" style="display: none;"></div>
+                  <div class="right">
+                     <a class="waves-effect #ef5350 red lighten-1 btn" id="addColorBtn"><i class="material-icons left"></i>ADD</a>
+                  </div>
+               </div>
+            </div>
          </div>
-      </script> -->
+      </div>
+   </div>
 
-  <!--  Scripts-->
-  <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-  <script src="js/materialize.js"></script>
-  <script src="js/init.js"></script>
+   <!-- Modal3 Structure -->
+   <div id="modal3" class="modal" style="margin-top: 3%;">
+         <div class="modal-content">
+            <h4 class="center">Add Brand</h4>
+            <div class="addNew-wrapper">
+               <div class="addBrandSuccess animated fadeInUp" style="display: none;"></div>
+               <div class="row">
+                  <div class="col s12 m12">
+                     <div class="input-field">
+                        <label for="brand">Add brand e.g Nike, Adidas, etc</label>
+                        <input id="addBrandInput" type="text" class="validate" autofocus>
+                     </div>
+                     <div class="selectBrandError animated fadeInUp" style="display: none;"></div>
+                     <div class="right">
+                        <a class="waves-effect #ef5350 red lighten-1 btn" id="addBrandBtn"><i class="material-icons left"></i>ADD</a>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
 
-  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+      <!-- Modal4 Structure -->
+   <div id="modal4" class="modal" style="margin-top: 3%;">
+         <div class="modal-content">
+            <h4 class="center">Add Size</h4>
+            <div class="addNew-wrapper">
+               <div class="addColorSuccess animated fadeInUp" style="display: none;">sdsds</div>
+               <div class="row">
+                  <div class="col s12 m12">
+                     <div class="input-field">
+                        <label for="size">Add size e.g 5, 8, etc</label>
+                        <input id="addSizeInput" type="number" class="validate" autofocus>
+                     </div>
+                     <div class="selectSizeError animated fadeInUp" style="display: none;"></div>
+                     <div class="right">
+                        <a class="waves-effect #ef5350 red lighten-1 btn" id="addSizeBtn"><i class="material-icons left"></i>ADD</a>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
 
-  <script src="./client.js"></script>
 
-  </body>
+
+
+
+   <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+   <script src="js/materialize.js"></script>
+   <script src="js/init.js"></script>
+
+   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+   <script src="./client.js"></script>
+
+</body>
+
 </html>
